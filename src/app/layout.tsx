@@ -1,12 +1,10 @@
+import '@mantine/core/styles.css';
 import "~/styles/globals.css";
 
-import { Inter } from "next/font/google";
+import { ColorSchemeScript, MantineProvider } from '@mantine/core';
 
 import { TRPCReactProvider } from "~/trpc/react";
 
-const inter = Inter({
-  subsets: ["latin"],
-});
 
 export const metadata = {
   title: "Create T3 App",
@@ -21,8 +19,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <TRPCReactProvider>{children}</TRPCReactProvider>
+            <head>
+        <ColorSchemeScript />
+      </head>
+
+      <body>
+      
+
+        <TRPCReactProvider><MantineProvider>{children}</MantineProvider></TRPCReactProvider>
       </body>
     </html>
   );
