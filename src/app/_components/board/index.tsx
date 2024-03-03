@@ -5,6 +5,7 @@ import KanbanBoard from '~/app/_components/board/kanban/board';
 import { Item } from '~/app/_components/board/kanbanCard';
 import { Boards, type BoardTypes } from '~/app/_components/board/type';
 import { ChipGroup, Group, Chip, Paper, Text, Box } from '@mantine/core';
+import { reorderKanban } from '~/lib/reorder';
 
 interface Author {
   id: string;
@@ -28,6 +29,9 @@ const Board = (props: Props<Quote>) => {
 
   const [selectedType, setSelectedType] = useState<string>(Boards.kanban);
 
+  const [columns, setColumns] = useState(data);
+  const [ordered, setOrdered] = useState(Object.keys(data));
+
   return (
     <Box p="xl">
       <Paper withBorder w="fit-content" px="xs" py="xs" mb="md">
@@ -48,11 +52,15 @@ const Board = (props: Props<Quote>) => {
 
       {selectedType === Boards.kanban && (
         <KanbanBoard
-          data={data}
+          data={columns}
+          columns={ordered}
           card={Item}
-          onDragEnd={() => {
-            console.log('onDragEnd');
-          }}
+          onDragEnd={reorderKanban({
+            ordered,
+            setOrdered,
+            columns,
+            setColumns,
+          })}
         />
       )}
 

@@ -9,14 +9,13 @@ import { Group } from '@mantine/core';
 
 interface BoardProps<T extends Item> {
   data: Record<string, T[]>;
+  columns: string[];
   card: (props: CardProps<T>) => JSX.Element;
   onDragEnd: OnDragEndResponder;
 }
 
 const KanbanBoard = <T extends Item>(props: BoardProps<T>) => {
-  const { data, onDragEnd, card: Card } = props;
-
-  const columns = Object.keys(data);
+  const { data, columns, onDragEnd, card: Card } = props;
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
