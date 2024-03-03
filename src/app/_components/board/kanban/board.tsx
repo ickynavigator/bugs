@@ -22,24 +22,26 @@ const KanbanBoard = <T extends Item>(props: BoardProps<T>) => {
     <DragDropContext onDragEnd={onDragEnd}>
       <Droppable droppableId="board" type="COLUMN" direction="horizontal">
         {provided => (
-          <Group
-            grow
-            align="start"
-            {...provided.droppableProps}
-            ref={provided.innerRef}
-          >
-            {columns.map((key, index) => (
-              <Column
-                key={key}
-                index={index}
-                title={key}
-                data={data[key] ?? []}
-                card={Card}
-              />
-            ))}
+          <>
+            <Group
+              grow
+              align="start"
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+            >
+              {columns.map((key, index) => (
+                <Column
+                  key={key}
+                  index={index}
+                  title={key}
+                  data={data[key] ?? []}
+                  card={Card}
+                />
+              ))}
+            </Group>
 
             {provided.placeholder}
-          </Group>
+          </>
         )}
       </Droppable>
     </DragDropContext>
