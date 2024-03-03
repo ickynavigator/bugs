@@ -1,4 +1,5 @@
 import { Box, Paper, Text } from '@mantine/core';
+import { memo } from 'react';
 import { type CardProps } from '~/app/_components/board/kanban/types';
 
 interface Author {
@@ -14,7 +15,7 @@ interface Quote {
   author: Author;
 }
 
-export const Item = (props: CardProps<Quote>) => {
+const _Item = (props: CardProps<Quote>) => {
   const { item, provided } = props;
 
   return (
@@ -33,3 +34,5 @@ export const Item = (props: CardProps<Quote>) => {
     </Paper>
   );
 };
+
+export const Item = memo(_Item) as typeof _Item;

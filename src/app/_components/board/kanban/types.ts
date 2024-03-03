@@ -7,6 +7,11 @@ export interface Item {
   id: string;
 }
 
+export interface ListProps<T extends Item> {
+  data: T[];
+  card: (props: CardProps<T>) => JSX.Element;
+}
+
 export interface CardProps<T extends Item> {
   item: T;
   provided: DraggableProvided;

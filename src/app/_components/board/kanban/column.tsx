@@ -1,9 +1,32 @@
 import { Draggable, Droppable } from '@hello-pangea/dnd';
-import type { ColumnProps, Item } from '~/app/_components/board/kanban/types';
+import type {
+  ColumnProps,
+  Item,
+  ListProps,
+} from '~/app/_components/board/kanban/types';
 import { Box, Paper, Stack, Title } from '@mantine/core';
+import { memo } from 'react';
+
+const List = <T extends Item>(props: ListProps<T>) => {
+  const { data, card: Card } = props;
+
+  return (
+    <>
+      {data.map((item, index) => (
+        <Draggable key={item.id} index={index} draggableId={item.id}>
+          {(provided, snapshot) => (
+            <Card item={item} provided={provided} snapshot={snapshot} />
+          )}
+        </Draggable>
+      ))}
+    </>
+  );
+};
+
+const MemoizedList = memo(List) as typeof List;
 
 const Column = <T extends Item>(props: ColumnProps<T>) => {
-  const { title, index, data, card: Card } = props;
+  const { title, index, data, card } = props;
 
   return (
     <Draggable draggableId={title} index={index}>
@@ -28,21 +51,7 @@ const Column = <T extends Item>(props: ColumnProps<T>) => {
                   ref={dropProvided.innerRef}
                   gap="xs"
                 >
-                  {data.map((item, index) => (
-                    <Draggable
-                      key={item.id}
-                      index={index}
-                      draggableId={item.id}
-                    >
-                      {(provided, snapshot) => (
-                        <Card
-                          item={item}
-                          provided={provided}
-                          snapshot={snapshot}
-                        />
-                      )}
-                    </Draggable>
-                  ))}
+                  <MemoizedList data={data} card={card} />
                 </Stack>
 
                 {dropProvided.placeholder}
