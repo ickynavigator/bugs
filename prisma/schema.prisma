@@ -7,39 +7,70 @@ generator client {
 }
 
 datasource db {
-    provider = "mysql"
+    provider = "sqlite"
     url      = env("DATABASE_URL")
-
-    // Do not use foreign keys (PlanetScale does not support them)
-    relationMode = "prisma"
 }
 
-model Post {
-    id        Int      @id @default(autoincrement())
-    name      String
+model IssueState {
+    id    Int    @id @default(autoincrement())
+    name  String
+    color String
+
+    Issue Issue[]
+}
+
+model Issue {
+    id          Int     @id @default(autoincrement())
+    name        String
+    description String?
+    severity    Int
+
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
     createdBy   User   @relation(fields: [createdById], references: [id])
     createdById String
 
+    state   IssueState @relation(fields: [stateId], references: [id])
+    stateId Int
+
+    Project   Project @relation(fields: [projectId], references: [id])
+    projectId Int
+
+    @@index([projectId])
+}
+
+model Project {
+    id          Int     @id @default(autoincrement())
+    name        String
+    shortcode   String  @unique
+    description String?
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    createdBy   User   @relation(fields: [createdById], references: [id])
+    createdById String
+
+    Issues Issue[]
+
     @@index([name])
     @@index([createdById])
 }
 
-// Necessary for Next auth
+// region -  NextAuth
 model Account {
     id                String  @id @default(cuid())
     userId            String
     type              String
     provider          String
     providerAccountId String
-    refresh_token     String? @db.Text
-    access_token      String? @db.Text
+    refresh_token     String?
+    access_token      String?
     expires_at        Int?
     token_type        String?
     scope             String?
-    id_token          String? @db.Text
+    id_token          String?
     session_state     String?
     user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -65,7 +96,8 @@ model User {
     image         String?
     accounts      Account[]
     sessions      Session[]
-    posts         Post[]
+    Project       Project[]
+    Issue         Issue[]
 }
 
 model VerificationToken {
@@ -75,3 +107,5 @@ model VerificationToken {
 
     @@unique([identifier, token])
 }
+
+// endregion - NextAuth
