@@ -24,8 +24,9 @@ const Column = <T extends Item>(props: ColumnProps<T>) => {
             {dropProvided => (
               <>
                 <Stack
-                  ref={dropProvided.innerRef}
                   {...dropProvided.droppableProps}
+                  ref={dropProvided.innerRef}
+                  gap="xs"
                 >
                   {data.map((item, index) => (
                     <Draggable

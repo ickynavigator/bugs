@@ -23,10 +23,11 @@ const KanbanBoard = <T extends Item>(props: BoardProps<T>) => {
         {provided => (
           <>
             <Group
-              grow
-              align="start"
               {...provided.droppableProps}
               ref={provided.innerRef}
+              gap="xs"
+              grow
+              align="start"
             >
               {columns.map((key, index) => (
                 <Column
