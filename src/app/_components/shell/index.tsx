@@ -13,6 +13,7 @@ import { useDisclosure } from '@mantine/hooks';
 import Link from 'next/link';
 
 import Sidebar from './sidebar';
+import ColorSchemeToggle from '../colorSchemeToggle';
 
 interface Props {
   children: React.ReactNode;
@@ -28,12 +29,20 @@ export function Shell(props: Props) {
       padding="md"
     >
       <AppShellHeader>
-        <Group h="100%" px="md">
-          <Burger opened={opened} onClick={toggle} size="sm" hiddenFrom="sm" />
+        <Group justify="space-between" h="100%" px="md">
+          <Group h="100%">
+            <Burger
+              opened={opened}
+              onClick={toggle}
+              size="sm"
+              hiddenFrom="sm"
+            />
+            <Anchor component={Link} href="/" passHref underline="never">
+              <Title>Bug Tracker</Title>
+            </Anchor>
+          </Group>
 
-          <Anchor component={Link} href="/" passHref underline="never">
-            <Title>Bug Tracker</Title>
-          </Anchor>
+          <ColorSchemeToggle />
         </Group>
       </AppShellHeader>
 
