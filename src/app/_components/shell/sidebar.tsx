@@ -81,6 +81,8 @@ const mainlinks: MainLinkProps[] = [
 ];
 
 function MainLink(props: MainLinkProps) {
+  const pathname = usePathname();
+
   const inner = (
     <Group justify="space-between" p="xs" fw="500">
       <Group gap="xs">
@@ -101,6 +103,8 @@ function MainLink(props: MainLinkProps) {
       underline="never"
       className={cx(classes.button, {
         [`${classes.disabled}`]: props.disabled,
+        [`${classes.active}`]:
+          pathname.toLocaleLowerCase() === props.link.toLocaleLowerCase(),
       })}
       component={Link}
       href={props.link}
