@@ -5,7 +5,8 @@ import {
 } from '@hello-pangea/dnd';
 import type { Item, CardProps } from '~/app/_components/board/kanban/types';
 import Column from '~/app/_components/board/kanban/column';
-import { Group } from '@mantine/core';
+import { Group, ScrollArea, rem } from '@mantine/core';
+import { COLUMN_WIDTH } from '~/lib/constant';
 
 interface BoardProps<T extends Item> {
   data: Record<string, T[]>;
@@ -21,10 +22,11 @@ const KanbanBoard = <T extends Item>(props: BoardProps<T>) => {
     <DragDropContext onDragEnd={onDragEnd}>
       <Droppable droppableId="board" type="COLUMN" direction="horizontal">
         {provided => (
-          <>
+          <ScrollArea offsetScrollbars scrollbars="x">
             <Group
               {...provided.droppableProps}
               ref={provided.innerRef}
+              miw={rem(COLUMN_WIDTH * columns.length)}
               gap="xs"
               grow
               align="start"
@@ -41,7 +43,7 @@ const KanbanBoard = <T extends Item>(props: BoardProps<T>) => {
             </Group>
 
             {provided.placeholder}
-          </>
+          </ScrollArea>
         )}
       </Droppable>
     </DragDropContext>

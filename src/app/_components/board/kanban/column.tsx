@@ -4,8 +4,9 @@ import type {
   Item,
   ListProps,
 } from '~/app/_components/board/kanban/types';
-import { Box, Paper, Stack, Title } from '@mantine/core';
+import { Box, Paper, Stack, Title, rem } from '@mantine/core';
 import { memo } from 'react';
+import { COLUMN_WIDTH } from '~/lib/constant';
 
 const List = <T extends Item>(props: ListProps<T>) => {
   const { data, card: Card } = props;
@@ -25,6 +26,7 @@ const List = <T extends Item>(props: ListProps<T>) => {
 
 const MemoizedList = memo(List) as typeof List;
 
+const COLUMN_OFFSET = 50;
 const Column = <T extends Item>(props: ColumnProps<T>) => {
   const { title, index, data, card } = props;
 
@@ -36,6 +38,7 @@ const Column = <T extends Item>(props: ColumnProps<T>) => {
           shadow="sm"
           p="sm"
           radius="md"
+          miw={rem(COLUMN_WIDTH - COLUMN_OFFSET)}
           ref={provided.innerRef}
           {...provided.draggableProps}
         >
