@@ -3,9 +3,11 @@
 import { useState } from 'react';
 import KanbanBoard from '~/app/_components/board/kanban/board';
 import { Item } from '~/app/_components/board/kanbanCard';
-import { Boards, type BoardTypes } from '~/app/_components/board/type';
-import { ChipGroup, Group, Chip, Paper, Text, Box } from '@mantine/core';
+import { Boards } from '~/app/_components/board/type';
+import { Group, Text, Box, Button, SegmentedControl } from '@mantine/core';
 import { reorderKanban } from '~/lib/reorder';
+import { IconPlus } from '@tabler/icons-react';
+import Search from './search';
 
 interface Author {
   id: string;
@@ -34,21 +36,27 @@ const Board = (props: Props<Quote>) => {
 
   return (
     <Box>
-      <Paper withBorder w="fit-content" px="xs" py="xs" mb="md">
-        <ChipGroup
-          multiple={false}
-          value={selectedType}
-          onChange={setSelectedType}
-        >
-          <Group justify="center">
-            {(Object.keys(Boards) as BoardTypes[]).map(key => (
-              <Chip key={key} value={key} tt="capitalize">
-                {Boards[key]}
-              </Chip>
-            ))}
-          </Group>
-        </ChipGroup>
-      </Paper>
+      <Group mb="md" justify="space-between">
+        <Group>
+          <SegmentedControl
+            data={Object.values(Boards)}
+            tt="capitalize"
+            value={selectedType}
+            onChange={setSelectedType}
+          />
+
+          <Search />
+        </Group>
+
+        <Group>
+          <Button size="sm" leftSection={<IconPlus size={14} />}>
+            Create Issue
+          </Button>
+          <Button size="sm" leftSection={<IconPlus size={14} />}>
+            Create Column
+          </Button>
+        </Group>
+      </Group>
 
       {selectedType === Boards.kanban && (
         <KanbanBoard
