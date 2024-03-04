@@ -1,5 +1,6 @@
 import { createEnv } from '@t3-oss/env-nextjs';
 import { z } from 'zod';
+import { vercel } from '@t3-oss/env-nextjs/presets';
 
 export const env = createEnv({
   /**
@@ -32,8 +33,9 @@ export const env = createEnv({
       str => process.env.VERCEL_URL ?? str,
       process.env.VERCEL ? z.string() : z.string().url(),
     ),
+    VERCEL_URL: z.string().default('localhost:3000'),
   },
-
+  extends: [vercel],
   /**
    * Specify your client-side environment variables schema here. This way you can ensure the app
    * isn't built with invalid env vars. To expose them to the client, prefix them with
