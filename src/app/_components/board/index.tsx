@@ -33,7 +33,7 @@ const Board = (props: Props<Quote>) => {
   const [ordered, setOrdered] = useState(Object.keys(data));
 
   return (
-    <Box p="xl">
+    <Box>
       <Paper withBorder w="fit-content" px="xs" py="xs" mb="md">
         <ChipGroup
           multiple={false}
