@@ -58,6 +58,17 @@ model Project {
     @@index([createdById])
 }
 
+model Note {
+    id        Int      @id @default(autoincrement())
+    name      String
+    content   String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    createdBy   User   @relation(fields: [createdById], references: [id])
+    createdById String
+}
+
 // region -  NextAuth
 model Account {
     id                String  @id @default(cuid())
@@ -98,6 +109,7 @@ model User {
     sessions      Session[]
     Project       Project[]
     Issue         Issue[]
+    Note          Note[]
 }
 
 model VerificationToken {
