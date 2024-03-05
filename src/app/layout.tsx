@@ -1,6 +1,9 @@
+// mantine style imports
 import '@mantine/core/styles.css';
 import '@mantine/tiptap/styles.css';
-
+// style imports
+import '~/app/globals.css';
+// packages
 import { Analytics } from '@vercel/analytics/next';
 import { ColorSchemeScript, MantineProvider } from '@mantine/core';
 import { TRPCReactProvider } from '~/trpc/react';
