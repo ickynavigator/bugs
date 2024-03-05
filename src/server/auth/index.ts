@@ -1,10 +1,11 @@
 import { PrismaAdapter } from '@auth/prisma-adapter';
 import NextAuth from 'next-auth';
-import { type Adapter } from 'next-auth/adapters';
 export type { Session } from 'next-auth';
 import type { DefaultSession } from 'next-auth';
+import GitHub from '@auth/core/providers/github';
 
 import { db } from '~/server/db';
+import { env } from '~/env';
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -42,7 +43,7 @@ export const {
       },
     }),
   },
-  adapter: PrismaAdapter(db) as Adapter,
+  adapter: PrismaAdapter(db),
   providers: [
     /**
      * ...add more providers here.
@@ -53,5 +54,9 @@ export const {
      *
      * @see https://next-auth.js.org/providers/github
      */
+    GitHub({
+      clientId: env.GITHUB_CLIENT_ID,
+      clientSecret: env.GITHUB_CLIENT_SECRET,
+    }),
   ],
 });
