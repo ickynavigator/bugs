@@ -1,10 +1,8 @@
 import { PrismaAdapter } from '@auth/prisma-adapter';
-import {
-  getServerSession,
-  type DefaultSession,
-  type NextAuthOptions,
-} from 'next-auth';
+import NextAuth from 'next-auth';
 import { type Adapter } from 'next-auth/adapters';
+export type { Session } from 'next-auth';
+import type { DefaultSession } from 'next-auth';
 
 import { db } from '~/server/db';
 
@@ -15,7 +13,7 @@ import { db } from '~/server/db';
  * @see https://next-auth.js.org/getting-started/typescript#module-augmentation
  */
 declare module 'next-auth' {
-  interface Session extends DefaultSession {
+  interface Session {
     user: {
       id: string;
       // ...other properties
@@ -29,12 +27,12 @@ declare module 'next-auth' {
   // }
 }
 
-/**
- * Options for NextAuth.js used to configure adapters, providers, callbacks, etc.
- *
- * @see https://next-auth.js.org/configuration/options
- */
-export const authOptions: NextAuthOptions = {
+export const {
+  auth,
+  signIn,
+  signOut,
+  handlers: { GET, POST },
+} = NextAuth({
   callbacks: {
     session: ({ session, user }) => ({
       ...session,
@@ -56,11 +54,4 @@ export const authOptions: NextAuthOptions = {
      * @see https://next-auth.js.org/providers/github
      */
   ],
-};
-
-/**
- * Wrapper for `getServerSession` so that you don't need to import the `authOptions` in every file.
- *
- * @see https://next-auth.js.org/configuration/nextjs
- */
-export const getServerAuthSession = () => getServerSession(authOptions);
+});
