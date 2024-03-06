@@ -1,5 +1,3 @@
-'use client';
-
 import { Stack } from '@mantine/core';
 
 import Note from '~/app/_components/note';
@@ -9,7 +7,7 @@ const content =
 
 const notes = [{ id: 1, content: content, name: 'Note 1' }];
 
-export default function Page() {
+export default async function Page() {
   return (
     <Stack>
       {notes.map(note => (

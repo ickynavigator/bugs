@@ -65,19 +65,24 @@ interface MainLinkProps {
 const mainlinks: MainLinkProps[] = [
   {
     icon: IconCheckbox,
-    link: '/tasks',
+    link: '/dashboard/tasks',
     label: 'Tasks',
     notifications: 4,
     disabled: true,
   },
-  { icon: IconNote, link: '/notes', label: 'Notes' },
+  { icon: IconNote, link: '/dashboard/notes', label: 'Notes' },
   {
     icon: IconAddressBook,
-    link: '/contacts',
+    link: '/dashboard/contacts',
     label: 'Contacts',
     disabled: true,
   },
-  { icon: IconBulb, link: '/activity', label: 'Activity', disabled: true },
+  {
+    icon: IconBulb,
+    link: '/dashboard/activity',
+    label: 'Activity',
+    disabled: true,
+  },
 ];
 
 function MainLink(props: MainLinkProps) {
@@ -149,7 +154,7 @@ const Sidebar = () => {
         <Stack gap={rem(4)} mt="xs">
           {projects.length > 0 ? (
             projects.map(project => {
-              const href = `/project/${project.shortcode}`;
+              const href = `/dashboard/project/${project.shortcode}`;
 
               return (
                 <Anchor
