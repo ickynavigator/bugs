@@ -29,7 +29,7 @@ export const env = createEnv({
      *
      * VERCEL_URL doesn't include `https` so it cant be validated as a URL
      */
-    NEXTAUTH_URL: z
+    AUTH_URL: z
       .preprocess(
         str => process.env.VERCEL_URL ?? str,
         process.env.VERCEL ? z.string() : z.string().url(),
