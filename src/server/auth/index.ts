@@ -28,20 +28,45 @@ declare module 'next-auth' {
   // }
 }
 
+const useSecureCookies = env.VERCEL_ENV === 'production';
+const cookiePrefix = useSecureCookies ? '__Secure-' : '';
+const cookieDomain = useSecureCookies ? 'bugs.obifortune.com' : undefined;
+
 export const {
   auth,
   signIn,
   signOut,
   handlers: { GET, POST },
 } = NextAuth({
-  callbacks: {
-    session: ({ session, user }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        id: user.id,
+  basePath: '/api/auth',
+  trustHost: true,
+  pages: {
+    signIn: '/login',
+  },
+  cookies: {
+    sessionToken: {
+      name: `${cookiePrefix}next-auth.session-token`,
+      options: {
+        httpOnly: true,
+        sameSite: 'lax',
+        path: '/',
+        domain: cookieDomain,
+        secure: useSecureCookies,
       },
-    }),
+    },
+  },
+  callbacks: {
+    session: opts => {
+      if (!('user' in opts)) throw 'unreachable with session strategy';
+
+      return {
+        ...opts.session,
+        user: {
+          ...opts.session.user,
+          id: opts.user.id,
+        },
+      };
+    },
   },
   adapter: PrismaAdapter(db),
   providers: [

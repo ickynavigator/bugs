@@ -29,10 +29,12 @@ export const env = createEnv({
      *
      * VERCEL_URL doesn't include `https` so it cant be validated as a URL
      */
-    NEXTAUTH_URL: z.preprocess(
-      str => process.env.VERCEL_URL ?? str,
-      process.env.VERCEL ? z.string() : z.string().url(),
-    ),
+    NEXTAUTH_URL: z
+      .preprocess(
+        str => process.env.VERCEL_URL ?? str,
+        process.env.VERCEL ? z.string() : z.string().url(),
+      )
+      .transform(str => `${str}/api/auth`),
     VERCEL_URL: z.string().default('localhost:3000'),
     GITHUB_CLIENT_ID: z.string(),
     GITHUB_CLIENT_SECRET: z.string(),
