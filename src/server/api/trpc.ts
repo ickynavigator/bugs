@@ -29,7 +29,7 @@ import { db } from '~/server/db';
  */
 export const createTRPCContext = async (opts: {
   headers: Headers;
-  session: Session | null;
+  session?: Session | null;
 }) => {
   const session = opts.session ?? (await auth());
   const source = opts.headers.get('x-trpc-source') ?? 'unknown';
