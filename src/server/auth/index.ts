@@ -83,6 +83,7 @@ export const {
     GitHub({
       clientId: env.GITHUB_CLIENT_ID,
       clientSecret: env.GITHUB_CLIENT_SECRET,
+      allowDangerousEmailAccountLinking: true,
     }),
     Google({
       clientId: env.GOOGLE_CLIENT_ID,
@@ -94,6 +95,7 @@ export const {
           response_type: 'code',
         },
       },
+      allowDangerousEmailAccountLinking: true,
     }),
   ],
 });
