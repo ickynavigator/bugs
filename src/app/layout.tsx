@@ -10,6 +10,7 @@ import { TRPCReactProvider } from '~/trpc/react';
 import type { Metadata } from 'next';
 import { env } from '~/env';
 import { ModalsProvider } from '@mantine/modals';
+import theme from '~/lib/mantine';
 
 export const metadata: Metadata = {
   metadataBase: new URL(`https://${env.VERCEL_URL}`),
@@ -65,7 +66,7 @@ export default function RootLayout({
 
       <body>
         <TRPCReactProvider>
-          <MantineProvider>
+          <MantineProvider theme={theme}>
             <ModalsProvider>{children}</ModalsProvider>
           </MantineProvider>
         </TRPCReactProvider>
