@@ -42,7 +42,11 @@ export default function EditNoteName(props: Note) {
         </form>
       </Modal>
 
-      <ActionIcon onClick={open} loading={renameNote.isLoading}>
+      <ActionIcon
+        variant="outline"
+        onClick={open}
+        loading={renameNote.isLoading}
+      >
         <IconPencil style={{ width: rem(16), height: rem(16) }} stroke={1.5} />
       </ActionIcon>
     </>

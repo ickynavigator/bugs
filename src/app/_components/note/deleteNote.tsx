@@ -31,6 +31,7 @@ export default function DeleteNote(props: Note) {
 
   return (
     <ActionIcon
+      variant="outline"
       color="red"
       loading={deleteNote.isLoading}
       onClick={handleDelete}

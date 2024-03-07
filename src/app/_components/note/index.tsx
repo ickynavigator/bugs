@@ -14,7 +14,7 @@ import {
   RichTextEditorControlsGroup,
   RichTextEditorContent,
 } from '@mantine/tiptap';
-import { Box, Group, Title } from '@mantine/core';
+import { ActionIconGroup, Box, Group, Title } from '@mantine/core';
 import { useEditor } from '@tiptap/react';
 import type { Note } from '@prisma/client';
 import EditNoteName from './editNoteName';
@@ -49,8 +49,10 @@ export default function Note(props: Props) {
         </Box>
 
         <Group>
-          <EditNoteName {...note} />
-          <DeleteNote {...note} />
+          <ActionIconGroup>
+            <EditNoteName {...note} />
+            <DeleteNote {...note} />
+          </ActionIconGroup>
         </Group>
       </Group>
 
