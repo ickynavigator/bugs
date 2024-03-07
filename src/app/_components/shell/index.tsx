@@ -14,6 +14,7 @@ import Link from 'next/link';
 
 import Sidebar from './sidebar';
 import ColorSchemeToggle from '../colorSchemeToggle';
+import LogoutIcon from './logout';
 
 interface Props {
   children: React.ReactNode;
@@ -42,7 +43,10 @@ export function Shell(props: Props) {
             </Anchor>
           </Group>
 
-          <ColorSchemeToggle />
+          <Group>
+            <ColorSchemeToggle />
+            <LogoutIcon />
+          </Group>
         </Group>
       </AppShellHeader>
 
