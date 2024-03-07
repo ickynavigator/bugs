@@ -9,6 +9,7 @@ import { ColorSchemeScript, MantineProvider } from '@mantine/core';
 import { TRPCReactProvider } from '~/trpc/react';
 import type { Metadata } from 'next';
 import { env } from '~/env';
+import { ModalsProvider } from '@mantine/modals';
 
 export const metadata: Metadata = {
   metadataBase: new URL(`https://${env.VERCEL_URL}`),
@@ -64,7 +65,9 @@ export default function RootLayout({
 
       <body>
         <TRPCReactProvider>
-          <MantineProvider>{children}</MantineProvider>
+          <MantineProvider>
+            <ModalsProvider>{children}</ModalsProvider>
+          </MantineProvider>
         </TRPCReactProvider>
 
         <Analytics />
