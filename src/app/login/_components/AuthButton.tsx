@@ -54,7 +54,7 @@ export function Base(props: BaseButtonProps) {
 
 export function GoogleButton(props: EnhancedButtonProps) {
   return (
-    <Base icon={<IconBrandGoogle />} provider="google" disabled {...props}>
+    <Base icon={<IconBrandGoogle />} provider="google" {...props}>
       Continue with Google
     </Base>
   );
