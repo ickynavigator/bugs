@@ -41,7 +41,7 @@ export function Base(props: BaseButtonProps) {
   return (
     <Button
       onClick={handleSignIn}
-      disabled={state === 'pending'}
+      loading={state === 'pending'}
       leftSection={icon}
       variant="default"
       radius="xl"
