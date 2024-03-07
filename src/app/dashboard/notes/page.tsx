@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Loader, Stack } from '@mantine/core';
+import { Center, Loader, Stack } from '@mantine/core';
 import CreateNote from '~/app/_components/note/createNote';
 import Note from '~/app/_components/note/index';
 import { api } from '~/trpc/react';
@@ -13,9 +13,9 @@ export default function Page() {
       <CreateNote />
 
       {notes.isLoading ? (
-        <Box>
+        <Center>
           <Loader />
-        </Box>
+        </Center>
       ) : (
         notes.data?.map(note => <Note key={note.id} note={note} />)
       )}
