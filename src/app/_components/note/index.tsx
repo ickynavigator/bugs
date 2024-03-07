@@ -14,19 +14,51 @@ import {
   RichTextEditorControlsGroup,
   RichTextEditorContent,
 } from '@mantine/tiptap';
-import { ActionIconGroup, Box, Group, Title } from '@mantine/core';
+import {
+  ActionIconGroup,
+  Box,
+  Group,
+  ThemeIcon,
+  Title,
+  rem,
+} from '@mantine/core';
 import { useEditor } from '@tiptap/react';
 import type { Note } from '@prisma/client';
 import EditNoteName from './editNoteName';
 import DeleteNote from './deleteNote';
+import useNoteSync from '~/app/hook/useNoteSync';
+import { IconCheck, IconRefresh } from '@tabler/icons-react';
 
 interface Props {
   note: Note;
 }
 
+function SyncingIcon({ loading }: { loading: boolean }) {
+  return (
+    <ThemeIcon variant="filled" color={loading ? 'yellow' : 'green'}>
+      {loading ? (
+        <IconRefresh
+          style={{
+            width: rem(16),
+            height: rem(16),
+            animation: 'var(--spin)',
+          }}
+          stroke={1.5}
+        />
+      ) : (
+        <IconCheck style={{ width: rem(16), height: rem(16) }} stroke={1.5} />
+      )}
+    </ThemeIcon>
+  );
+}
+
 export default function Note(props: Props) {
   const { note } = props;
   const { content, name } = note;
+  const { onContentChange, loading: noteSyncLoading } = useNoteSync({
+    id: note.id,
+    initialContent: content,
+  });
 
   const editor = useEditor({
     extensions: [
@@ -39,6 +71,9 @@ export default function Note(props: Props) {
       TextAlign.configure({ types: ['heading', 'paragraph'] }),
     ],
     content,
+    onUpdate: ({ editor }) => {
+      onContentChange(editor.getHTML());
+    },
   });
 
   return (
@@ -49,6 +84,8 @@ export default function Note(props: Props) {
         </Box>
 
         <Group>
+          <SyncingIcon loading={noteSyncLoading} />
+
           <ActionIconGroup>
             <EditNoteName {...note} />
             <DeleteNote {...note} />

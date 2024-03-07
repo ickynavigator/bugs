@@ -2,3 +2,17 @@ html,
 body {
   height: 100%;
 }
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* store the spin as a variable in the root */
+:root {
+  --spin: spin 1s linear infinite;
+}
