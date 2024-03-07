@@ -2,7 +2,7 @@ import { Code, TextInput, rem } from '@mantine/core';
 import { useHotkeys } from '@mantine/hooks';
 import { IconSearch } from '@tabler/icons-react';
 import { useRef } from 'react';
-import useParamsState from '~/app/hook/useParamsState';
+import useParamsState from '~/hooks/useParamsState';
 
 const Search = () => {
   const ref = useRef<HTMLInputElement | null>(null);

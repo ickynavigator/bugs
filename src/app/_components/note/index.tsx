@@ -26,7 +26,7 @@ import { useEditor } from '@tiptap/react';
 import type { Note } from '@prisma/client';
 import EditNoteName from './editNoteName';
 import DeleteNote from './deleteNote';
-import useNoteSync from '~/app/hook/useNoteSync';
+import useNoteSync from '~/hooks/useNoteSync';
 import { IconCheck, IconRefresh } from '@tabler/icons-react';
 
 interface Props {

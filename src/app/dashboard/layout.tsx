@@ -1,6 +1,6 @@
 import React from 'react';
 import { Shell } from '~/app/_components/shell';
-import useAuthed from '../hook/useAuthed.server';
+import useAuthed from '../../hooks/useAuthed.server';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   useAuthed();
