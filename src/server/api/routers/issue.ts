@@ -44,4 +44,38 @@ export const issueRouter = createTRPCRouter({
 
     return res ?? [];
   }),
+  getProjectByShortCode: protectedProcedure
+    .input(z.object({ shortcode: z.string() }))
+    .query(async ({ ctx, input }) => {
+      return ctx.db.project.findFirst({
+        where: {
+          createdBy: { id: ctx.session.user.id },
+          shortcode: input.shortcode,
+        },
+      });
+    }),
+  editProject: protectedProcedure
+    .input(
+      z.object({
+        id: z.number(),
+        name: z.string(),
+        shortcode: z.string(),
+        description: z.string().nullable(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.project.update({
+        where: { id: input.id },
+        data: {
+          name: input.name,
+          shortcode: input.shortcode,
+          description: input.description,
+        },
+      });
+    }),
+  deleteProject: protectedProcedure
+    .input(z.number())
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.project.delete({ where: { id: input } });
+    }),
 });

@@ -4,12 +4,20 @@ import { useState } from 'react';
 import KanbanBoard from '~/app/_components/board/kanban/board';
 import { Item } from '~/app/_components/board/kanbanCard';
 import { Boards } from '~/app/_components/board/type';
-import { Group, Text, Box, Button, SegmentedControl } from '@mantine/core';
+import {
+  Group,
+  Text,
+  Box,
+  Button,
+  SegmentedControl,
+  Stack,
+} from '@mantine/core';
 import { reorderKanban } from '~/lib/reorder';
 import { IconPlus } from '@tabler/icons-react';
 import Search from './search';
 import CreateColumn from '~/app/_components/create/column';
 import CreateIssue from '~/app/_components/create/issue';
+import Header from '~/app/_components/board/header';
 
 interface Author {
   id: string;
@@ -38,43 +46,46 @@ const Board = (props: Props<Quote>) => {
 
   return (
     <Box>
-      <Group mb="md" justify="space-between">
-        <Group>
-          <SegmentedControl
-            data={Object.values(Boards)}
-            tt="capitalize"
-            value={selectedType}
-            onChange={setSelectedType}
-          />
+      <Stack>
+        <Header />
+        <Group mb="md" justify="space-between">
+          <Group>
+            <SegmentedControl
+              data={Object.values(Boards)}
+              tt="capitalize"
+              value={selectedType}
+              onChange={setSelectedType}
+            />
 
-          <Search />
-        </Group>
+            <Search />
+          </Group>
 
-        <Group>
-          <CreateIssue>
-            {({ open }) => (
-              <Button
-                size="sm"
-                leftSection={<IconPlus size={14} />}
-                onClick={open}
-              >
-                Create Issue
-              </Button>
-            )}
-          </CreateIssue>
-          <CreateColumn>
-            {({ open }) => (
-              <Button
-                size="sm"
-                leftSection={<IconPlus size={14} />}
-                onClick={open}
-              >
-                Create Column
-              </Button>
-            )}
-          </CreateColumn>
+          <Group>
+            <CreateIssue>
+              {({ open }) => (
+                <Button
+                  size="sm"
+                  leftSection={<IconPlus size={14} />}
+                  onClick={open}
+                >
+                  Create Issue
+                </Button>
+              )}
+            </CreateIssue>
+            <CreateColumn>
+              {({ open }) => (
+                <Button
+                  size="sm"
+                  leftSection={<IconPlus size={14} />}
+                  onClick={open}
+                >
+                  Create Column
+                </Button>
+              )}
+            </CreateColumn>
+          </Group>
         </Group>
-      </Group>
+      </Stack>
 
       {selectedType === Boards.kanban && (
         <KanbanBoard
