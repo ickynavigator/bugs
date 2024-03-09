@@ -83,6 +83,7 @@ export const issueRouter = createTRPCRouter({
       z.object({
         name: z.string(),
         color: z.string(),
+        projectId: z.number(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -90,6 +91,7 @@ export const issueRouter = createTRPCRouter({
         data: {
           name: input.name,
           color: input.color,
+          Project: { connect: { id: input.projectId } },
         },
       });
     }),

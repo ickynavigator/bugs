@@ -74,7 +74,7 @@ const Board = (props: Props<Quote>) => {
                 </Button>
               )}
             </CreateIssue>
-            <CreateColumn>
+            <CreateColumn projectId={0}>
               {({ open }) => (
                 <Button
                   size="sm"

@@ -8,6 +8,7 @@ import {
 } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
 import { useDisclosure } from '@mantine/hooks';
+import type { Project } from '@prisma/client';
 import React from 'react';
 import { z } from 'zod';
 import { api } from '~/trpc/react';
@@ -18,11 +19,12 @@ const schema = z.object({
 });
 
 interface Props {
+  projectId: Project['id'];
   children: (props: { open: () => void }) => React.ReactElement;
 }
 
 export default function Column(props: Props) {
-  const { children } = props;
+  const { children, projectId } = props;
 
   const [opened, { open, close }] = useDisclosure(false);
   const createColumn = api.issue.createIssueState.useMutation({
@@ -42,6 +44,7 @@ export default function Column(props: Props) {
     createColumn.mutate({
       name: values.name,
       color: values.color,
+      projectId,
     });
   };
 
