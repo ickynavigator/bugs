@@ -14,42 +14,16 @@ import {
   RichTextEditorControlsGroup,
   RichTextEditorContent,
 } from '@mantine/tiptap';
-import {
-  ActionIconGroup,
-  Box,
-  Group,
-  ThemeIcon,
-  Title,
-  rem,
-} from '@mantine/core';
+import { ActionIconGroup, Box, Group, Title } from '@mantine/core';
 import { useEditor } from '@tiptap/react';
 import type { Note } from '@prisma/client';
-import EditNoteName from './editNoteName';
-import DeleteNote from './deleteNote';
+import EditNoteName from '~/app/_components/note/editNoteName';
+import DeleteNote from '~/app/_components/note/deleteNote';
 import useNoteSync from '~/hooks/useNoteSync';
-import { IconCheck, IconRefresh } from '@tabler/icons-react';
+import SyncingIcon from '~/app/_components/syncingIcon';
 
 interface Props {
   note: Note;
-}
-
-function SyncingIcon({ loading }: { loading: boolean }) {
-  return (
-    <ThemeIcon variant="filled" color={loading ? 'yellow' : 'green'}>
-      {loading ? (
-        <IconRefresh
-          style={{
-            width: rem(16),
-            height: rem(16),
-            animation: 'var(--spin)',
-          }}
-          stroke={1.5}
-        />
-      ) : (
-        <IconCheck style={{ width: rem(16), height: rem(16) }} stroke={1.5} />
-      )}
-    </ThemeIcon>
-  );
 }
 
 export default function Note(props: Props) {
