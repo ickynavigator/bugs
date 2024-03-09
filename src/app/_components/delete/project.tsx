@@ -13,8 +13,10 @@ export default function Project(props: Props) {
   const { id } = props;
 
   const router = useRouter();
+  const utils = api.useUtils();
   const deleteProject = api.issue.deleteProject.useMutation({
     onSuccess: () => {
+      void utils.issue.getProjects.invalidate();
       router.push('/dashboard');
     },
   });
