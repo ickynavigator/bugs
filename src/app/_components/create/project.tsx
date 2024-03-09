@@ -66,6 +66,7 @@ export default function Project(props: Props) {
             <TextInput
               label="Name"
               placeholder="Project name"
+              withAsterisk
               {...form.getInputProps('name')}
             />
             <TextInput
@@ -74,7 +75,7 @@ export default function Project(props: Props) {
               description="3 letters shortcode for project reference"
               minLength={3}
               maxLength={3}
-              autoCapitalize="characters"
+              withAsterisk
               onInput={e => {
                 if (
                   'value' in e.target &&
@@ -99,6 +100,7 @@ export default function Project(props: Props) {
               autosize
               minRows={2}
               maxRows={4}
+              withAsterisk
               {...form.getInputProps('description')}
             />
 
