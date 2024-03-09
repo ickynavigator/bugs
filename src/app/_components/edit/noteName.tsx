@@ -8,7 +8,7 @@ import { api } from '~/trpc/react';
 import { useDisclosure } from '@mantine/hooks';
 import { z } from 'zod';
 
-export default function EditNoteName(props: Note) {
+export default function NoteName(props: Note) {
   const form = useForm({
     initialValues: { name: props.name },
     validate: zodResolver(z.object({ name: z.string().min(1).max(64) })),
@@ -36,7 +36,12 @@ export default function EditNoteName(props: Note) {
             placeholder="Your email"
             {...form.getInputProps('name')}
           />
-          <Button fullWidth mt="md" type="submit">
+          <Button
+            fullWidth
+            mt="md"
+            type="submit"
+            loading={renameNote.isLoading}
+          >
             Change Note Name
           </Button>
         </form>

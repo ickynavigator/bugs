@@ -17,8 +17,8 @@ import {
 import { ActionIconGroup, Box, Group, Title } from '@mantine/core';
 import { useEditor } from '@tiptap/react';
 import type { Note } from '@prisma/client';
-import EditNoteName from '~/app/_components/note/editNoteName';
-import DeleteNote from '~/app/_components/note/deleteNote';
+import EditNoteName from '~/app/_components/edit/noteName';
+import DeleteNote from '~/app/_components/delete/note';
 import useNoteSync from '~/hooks/useNoteSync';
 import SyncingIcon from '~/app/_components/syncingIcon';
 

@@ -6,7 +6,7 @@ import { type Note } from '@prisma/client';
 import { IconTrash } from '@tabler/icons-react';
 import { api } from '~/trpc/react';
 
-export default function DeleteNote(props: Note) {
+export default function Note(props: Note) {
   const utils = api.useUtils();
   const deleteNote = api.notes.deleteNote.useMutation({
     onSuccess: () => {
