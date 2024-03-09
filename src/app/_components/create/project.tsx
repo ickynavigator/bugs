@@ -32,8 +32,9 @@ export default function Project(props: Props) {
   });
   const createProject = api.issue.createProject.useMutation({
     onSuccess: () => {
-      close();
       void utils.issue.getProjects.invalidate();
+      close();
+      form.reset();
     },
   });
   const form = useForm({
