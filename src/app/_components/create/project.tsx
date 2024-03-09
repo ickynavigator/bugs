@@ -104,7 +104,9 @@ export default function Project(props: Props) {
               {...form.getInputProps('description')}
             />
 
-            <Button type="submit">Submit</Button>
+            <Button type="submit" loading={createProject.isLoading}>
+              Submit
+            </Button>
           </Stack>
         </form>
       </Modal>
