@@ -8,6 +8,8 @@ import { Group, Text, Box, Button, SegmentedControl } from '@mantine/core';
 import { reorderKanban } from '~/lib/reorder';
 import { IconPlus } from '@tabler/icons-react';
 import Search from './search';
+import CreateColumn from '~/app/_components/create/column';
+import CreateIssue from '~/app/_components/create/issue';
 
 interface Author {
   id: string;
@@ -49,12 +51,28 @@ const Board = (props: Props<Quote>) => {
         </Group>
 
         <Group>
-          <Button size="sm" leftSection={<IconPlus size={14} />}>
-            Create Issue
-          </Button>
-          <Button size="sm" leftSection={<IconPlus size={14} />}>
-            Create Column
-          </Button>
+          <CreateIssue>
+            {({ open }) => (
+              <Button
+                size="sm"
+                leftSection={<IconPlus size={14} />}
+                onClick={open}
+              >
+                Create Issue
+              </Button>
+            )}
+          </CreateIssue>
+          <CreateColumn>
+            {({ open }) => (
+              <Button
+                size="sm"
+                leftSection={<IconPlus size={14} />}
+                onClick={open}
+              >
+                Create Column
+              </Button>
+            )}
+          </CreateColumn>
         </Group>
       </Group>
 
