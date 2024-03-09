@@ -16,7 +16,9 @@ model IssueState {
     name  String
     color String
 
-    Issue Issue[]
+    Issue     Issue[]
+    Project   Project @relation(fields: [projectId], references: [id])
+    projectId Int
 }
 
 model Issue {
@@ -52,7 +54,8 @@ model Project {
     createdBy   User   @relation(fields: [createdById], references: [id])
     createdById String
 
-    Issues Issue[]
+    Issues      Issue[]
+    issueStates IssueState[]
 
     @@index([name])
     @@index([createdById])
