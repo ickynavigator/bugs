@@ -11,6 +11,7 @@ import {
   Button,
   SegmentedControl,
   Stack,
+  ButtonGroup,
 } from '@mantine/core';
 import { reorderKanban } from '~/lib/reorder';
 import { IconPlus } from '@tabler/icons-react';
@@ -60,11 +61,12 @@ const Board = (props: Props<Quote>) => {
             <Search />
           </Group>
 
-          <Group>
+          <ButtonGroup>
             <CreateIssue>
               {({ open }) => (
                 <Button
                   size="sm"
+                  variant="outline"
                   leftSection={<IconPlus size={14} />}
                   onClick={open}
                 >
@@ -76,6 +78,7 @@ const Board = (props: Props<Quote>) => {
               {({ open }) => (
                 <Button
                   size="sm"
+                  variant="outline"
                   leftSection={<IconPlus size={14} />}
                   onClick={open}
                 >
@@ -83,7 +86,7 @@ const Board = (props: Props<Quote>) => {
                 </Button>
               )}
             </CreateColumn>
-          </Group>
+          </ButtonGroup>
         </Group>
       </Stack>
 
