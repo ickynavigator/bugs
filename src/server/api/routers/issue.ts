@@ -24,7 +24,7 @@ export const issueRouter = createTRPCRouter({
       z.object({
         name: z.string(),
         shortcode: z.string(),
-        description: z.string(),
+        description: z.string().optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {

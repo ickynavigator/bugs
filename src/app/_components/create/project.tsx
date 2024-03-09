@@ -14,7 +14,7 @@ const schema = z.object({
     .refine(value => /^[a-zA-Z]+$/.test(value), {
       message: 'Only alphabetic characters are allowed',
     }),
-  description: z.string().min(1).max(255),
+  description: z.string().min(1).max(255).optional(),
 });
 
 interface Props {
@@ -41,7 +41,6 @@ export default function Project(props: Props) {
     initialValues: {
       name: '',
       shortcode: '',
-      description: '',
     },
     validate: zodResolver(schema),
     onValuesChange(values, prev) {
