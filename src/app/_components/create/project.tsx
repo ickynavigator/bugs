@@ -14,7 +14,7 @@ const schema = z.object({
     .refine(value => /^[a-zA-Z]+$/.test(value), {
       message: 'Only alphabetic characters are allowed',
     }),
-  description: z.string().min(1).max(255).optional(),
+  description: z.string().min(1).max(255).nullable(),
 });
 
 interface Props {
@@ -37,10 +37,11 @@ export default function Project(props: Props) {
       form.reset();
     },
   });
-  const form = useForm({
+  const form = useForm<z.infer<typeof schema>>({
     initialValues: {
       name: '',
       shortcode: '',
+      description: null,
     },
     validate: zodResolver(schema),
     onValuesChange(values, prev) {
