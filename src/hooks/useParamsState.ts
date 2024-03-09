@@ -30,7 +30,6 @@ const useParamsState = (props: Props) => {
 
   const setQuery = (value: string) => {
     const query = createQueryString(key, value);
-    console.log('query', query);
     if (query === '') {
       router.push(pathname);
     } else {
