@@ -1,7 +1,7 @@
 'use client';
 
 import { Center, Loader, Stack } from '@mantine/core';
-import CreateNote from '~/app/_components/note/createNote';
+import CreateNote from '~/app/_components/create/note';
 import Note from '~/app/_components/note/index';
 import { api } from '~/trpc/react';
 
