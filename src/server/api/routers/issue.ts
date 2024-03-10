@@ -95,4 +95,11 @@ export const issueRouter = createTRPCRouter({
         },
       });
     }),
+  getIssueStates: protectedProcedure
+    .input(z.object({ projectId: z.number() }))
+    .query(async ({ ctx, input }) => {
+      return ctx.db.issueState.findMany({
+        where: { Project: { id: input.projectId } },
+      });
+    }),
 });

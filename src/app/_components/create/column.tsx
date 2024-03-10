@@ -27,8 +27,10 @@ export default function Column(props: Props) {
   const { children, projectId } = props;
 
   const [opened, { open, close }] = useDisclosure(false);
+  const utils = api.useUtils();
   const createColumn = api.issue.createIssueState.useMutation({
     onSuccess: () => {
+      void utils.issue.getIssueStates.invalidate({ projectId });
       close();
       form.reset();
     },
