@@ -39,7 +39,7 @@ export const {
   signOut,
   handlers: { GET, POST },
 } = NextAuth({
-  basePath: '/api/auth',
+  basePath: '/',
   trustHost: true,
   pages: {
     signIn: '/login',
