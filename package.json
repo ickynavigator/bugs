@@ -10,7 +10,8 @@
     "dev": "next dev",
     "postinstall": "prisma generate",
     "lint": "next lint",
-    "start": "next start"
+    "start": "next start",
+    "prisma:make-migration": "dotenv -e .env.migration -- bunx prisma migrate dev"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^1.4.0",
@@ -55,6 +56,7 @@
     "@types/react-dom": "^18.2.19",
     "@typescript-eslint/eslint-plugin": "^7.0.2",
     "@typescript-eslint/parser": "^7.0.2",
+    "dotenv-cli": "^7.4.0",
     "eslint": "^8.56.0",
     "eslint-config-next": "^14.1.0",
     "eslint-config-prettier": "^9.1.0",

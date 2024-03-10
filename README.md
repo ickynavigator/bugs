@@ -1,29 +1,54 @@
-# Create T3 App
+# Bug Tracker
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+A bug tracker.
 
-## What's next? How do I make an app with this?
+## Getting Started
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+First copy the `.env.example` to `.env.local` and add enter the correct values.
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+```bash
+cp .env.example .env.local
+```
+
+Run the install script
+
+```bash
+bun i
+```
+
+Run the dev server
+
+```bash
+bun dev
+```
+
+## Tools
 
 - [Next.js](https://nextjs.org)
 - [NextAuth.js](https://next-auth.js.org)
 - [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
 - [tRPC](https://trpc.io)
+- [Mantine](https://mantine.dev/)
+- [Tabler Icons](https://tabler.io/docs/icons/react)
+- [Zod](https://zod.dev/)
 
-## Learn More
+## Migrations
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+Turso/Prisma Docs - [Link](https://www.prisma.io/docs/orm/overview/databases/turso)
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+We make use of the dev.db located in the prisma/throwaway folder - [Link](./prisma/throwaway/).
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+Run this command to generate the new sql updates (the diff between the ./dev.db and your new prisma updates)
 
-## How do I deploy this?
+```bash
+bun prisma:make-migration
+```
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+```bash
+turso db shell {PRISMA_DB_NAME} < ./prisma/migrations/{MIGRATION_GENERATED}/migration.sql
+```
+
+<details>
+<summary>T3 app</summary>
+This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+</details>
