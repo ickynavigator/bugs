@@ -23,18 +23,6 @@ export const env = createEnv({
       process.env.NODE_ENV === 'production'
         ? z.string()
         : z.string().optional(),
-    /**
-     * This makes Vercel deployments not fail if you don't set NEXTAUTH_URL
-     * Since NextAuth.js automatically uses the VERCEL_URL if present.
-     *
-     * VERCEL_URL doesn't include `https` so it cant be validated as a URL
-     */
-    AUTH_URL: z
-      .preprocess(
-        str => process.env.VERCEL_URL ?? str,
-        process.env.VERCEL ? z.string() : z.string().url(),
-      )
-      .transform(str => `${str}/api/auth`),
     GITHUB_CLIENT_ID: z.string(),
     GITHUB_CLIENT_SECRET: z.string(),
     GOOGLE_CLIENT_ID: z.string(),
