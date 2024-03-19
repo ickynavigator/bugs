@@ -21,22 +21,33 @@ interface Props {
 }
 
 export function Shell(props: Props) {
-  const [opened, { toggle }] = useDisclosure();
+  const [mobileOpened, { toggle: toggleMobile }] = useDisclosure();
+  const [desktopOpened, { toggle: toggleDesktop }] = useDisclosure(true);
 
   return (
     <AppShell
       header={{ height: 60 }}
-      navbar={{ width: 300, breakpoint: 'sm', collapsed: { mobile: !opened } }}
+      navbar={{
+        width: 300,
+        breakpoint: 'sm',
+        collapsed: { mobile: !mobileOpened, desktop: !desktopOpened },
+      }}
       padding="md"
     >
       <AppShellHeader>
         <Group justify="space-between" h="100%" px="md">
           <Group h="100%">
             <Burger
-              opened={opened}
-              onClick={toggle}
-              size="sm"
+              opened={mobileOpened}
+              onClick={toggleMobile}
               hiddenFrom="sm"
+              size="sm"
+            />
+            <Burger
+              opened={desktopOpened}
+              onClick={toggleDesktop}
+              visibleFrom="sm"
+              size="sm"
             />
             <Anchor component={Link} href="/" passHref underline="never">
               <Title>Bug Tracker</Title>
