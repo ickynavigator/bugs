@@ -150,48 +150,39 @@ export const issueRouter = createTRPCRouter({
       return group;
     }),
   changeIssueStateOrdinal: protectedProcedure
-    .input(z.object({ id: z.number(), ordinal: z.number() }))
+    .input(z.object({ pid: z.number(), sid: z.number(), ordinal: z.number() }))
     .mutation(async ({ ctx, input }) => {
-      // also update the ordinal of the other states
       const states = await ctx.db.issueState.findMany({
-        where: { Project: { id: input.id } },
+        where: { Project: { id: input.pid } },
+        select: { ordinal: true, id: true },
       });
 
-      const state = states.find(s => s.id === input.id);
-      if (!state) {
-        return null;
-      }
-
-      const otherStates = states.filter(s => s.id !== input.id);
+      const state = states.find(s => s.id === input.sid);
+      if (!state) return;
 
       const newOrdinal = input.ordinal;
       const oldOrdinal = state.ordinal;
 
-      const updatedStates = otherStates.map(s => {
-        if (s.ordinal >= newOrdinal && s.ordinal < oldOrdinal) {
-          return { ...s, ordinal: s.ordinal + 1 };
-        }
+      const diff = newOrdinal - oldOrdinal;
+      const isUp = diff < 0;
 
-        if (s.ordinal <= newOrdinal && s.ordinal > oldOrdinal) {
-          return { ...s, ordinal: s.ordinal - 1 };
-        }
-
-        return s;
+      const statesToUpdate = states.filter(s => {
+        if (isUp) return s.ordinal >= newOrdinal && s.ordinal < oldOrdinal;
+        return s.ordinal <= newOrdinal && s.ordinal > oldOrdinal;
       });
 
-      await ctx.db.issueState.update({
-        where: { id: input.id },
-        data: { ordinal: newOrdinal },
-      });
-
-      // use transactions
       await ctx.db.$transaction(
-        updatedStates.map(s =>
+        statesToUpdate.map(s =>
           ctx.db.issueState.update({
             where: { id: s.id },
-            data: { ordinal: s.ordinal },
+            data: { ordinal: s.ordinal + (isUp ? 1 : -1) },
           }),
         ),
       );
+
+      await ctx.db.issueState.update({
+        where: { id: input.sid },
+        data: { ordinal: newOrdinal },
+      });
     }),
 });
