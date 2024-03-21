@@ -1,36 +1,70 @@
-import { ThemeIcon, rem } from '@mantine/core';
-import { IconCheck, IconRefresh, IconX } from '@tabler/icons-react';
+import type { ThemeIconProps } from '@mantine/core';
+import { ThemeIcon } from '@mantine/core';
+import { IconCheck, IconPencil, IconRefresh, IconX } from '@tabler/icons-react';
 
 interface Props {
   loading: boolean;
+  size?: ThemeIconProps['size'];
   fail?: boolean;
+  dirty?: boolean;
   show?: boolean;
 }
 
-const IconSizes = { width: rem(16), height: rem(16) };
-
 export default function SyncingIcon(props: Props) {
-  const { loading, fail = false, show = true } = props;
+  const {
+    loading,
+    size = 'lg',
+    fail = false,
+    dirty = false,
+    show = true,
+  } = props;
 
   if (!show) {
     return null;
   }
 
-  return (
-    <ThemeIcon
-      variant="filled"
-      color={loading ? 'yellow' : fail ? 'red' : 'green'}
-    >
-      {loading ? (
+  const getIconColor = () => {
+    if (loading) {
+      return 'yellow';
+    }
+
+    if (fail) {
+      return 'red';
+    }
+
+    if (dirty) {
+      return 'blue';
+    }
+
+    return 'green';
+  };
+
+  const getIcon = () => {
+    const sharedStyles = { width: '70%', height: '70%' };
+
+    if (loading) {
+      return (
         <IconRefresh
-          style={{ ...IconSizes, animation: 'var(--spin)' }}
+          style={{ ...sharedStyles, animation: 'var(--spin)' }}
           stroke={1.5}
         />
-      ) : fail ? (
-        <IconX style={{ ...IconSizes }} stroke={1.5} />
-      ) : (
-        <IconCheck style={{ ...IconSizes }} stroke={1.5} />
-      )}
+      );
+    }
+
+    if (fail) {
+      return <IconX {...sharedStyles} stroke={1.5} />;
+    }
+
+    if (dirty) {
+      return <IconPencil {...sharedStyles} stroke={1.5} />;
+    }
+
+    return <IconCheck {...sharedStyles} stroke={1.5} />;
+  };
+
+  return (
+    <ThemeIcon variant="filled" color={getIconColor()} size={size}>
+      {getIcon()}
     </ThemeIcon>
   );
 }

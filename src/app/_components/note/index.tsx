@@ -29,7 +29,11 @@ interface Props {
 export default function Note(props: Props) {
   const { note } = props;
   const { content, name } = note;
-  const { onContentChange, loading: noteSyncLoading } = useNoteSync({
+  const {
+    onContentChange,
+    loading: noteSyncLoading,
+    dirty,
+  } = useNoteSync({
     id: note.id,
     initialContent: content,
   });
@@ -58,7 +62,7 @@ export default function Note(props: Props) {
         </Box>
 
         <Group>
-          <SyncingIcon loading={noteSyncLoading} />
+          <SyncingIcon loading={noteSyncLoading} dirty={dirty} size="md" />
 
           <ActionIconGroup>
             <EditNoteName {...note} />
