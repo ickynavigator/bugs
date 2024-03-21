@@ -20,30 +20,18 @@ import { api } from '~/trpc/react';
 import type { RouterOutputs } from '~/trpc/shared';
 import SyncingIcon from '../syncingIcon';
 import { type DropResult } from '@hello-pangea/dnd';
-import { reorderList } from '~/lib/reorder';
 import { KANBAN_TITLES } from '~/lib/constant';
+import { reorderList, reorderMap } from '~/lib/reorder';
 
-interface Author {
-  id: string;
-  name: string;
-  avatarUrl: string;
-  url: string;
-}
-
-interface Quote {
-  id: string;
-  content: string;
-  author: Author;
-}
-
-interface Props<T, Keys extends string = string> {
+interface Props {
   project: NonNullable<RouterOutputs['issue']['getProjectByShortCode']>;
-  data: Record<Keys, T[]>;
 }
 
-const Board = (props: Props<Quote>) => {
+const Board = (props: Props) => {
   const { project } = props;
+
   const utils = api.useUtils();
+
   const _issueStates = api.issue.getIssueStates.useQuery(
     { projectId: project.id },
     { initialData: [] },
@@ -52,6 +40,7 @@ const Board = (props: Props<Quote>) => {
     { projectId: project.id },
     { initialData: {} },
   );
+
   const changeIssueStateOrdinal = api.issue.changeIssueStateOrdinal.useMutation(
     {
       onSuccess: () => {
@@ -60,48 +49,51 @@ const Board = (props: Props<Quote>) => {
     },
   );
 
+  const [selectedType, setSelectedType] = useState<string>(Boards.kanban);
+
   const [isPending, startTransition] = useTransition();
 
-  const [selectedType, setSelectedType] = useState<string>(Boards.kanban);
-  const [ordered] = useOptimistic(_issues.data);
-  const [columns, setColumns] = useOptimistic(
-    _issueStates.data,
-    (state, pos: Record<'source' | 'destination', number>) => {
-      const reordered = reorderList(state, pos.source, pos.destination);
+  const [ordered, setOrdered] = useOptimistic(_issues.data);
+  const [columns, setColumns] = useOptimistic(_issueStates.data);
 
-      return reordered;
-    },
-  );
+  const onDragEnd = async (result: DropResult) => {
+    // TODO: handle combine?
+    if (result.combine) return;
 
-  function onDragEnd(result: DropResult) {
-    startTransition(async () => {
-      const { source: s, destination: d } = result;
+    const { source: s, destination: d } = result;
 
-      // dropped nowhere
-      if (!d) return;
+    // dropped nowhere
+    if (!d) return;
 
-      // did not move anywhere - can bail early
-      if (s.droppableId === d.droppableId && s.index === d.index) return;
+    // did not move anywhere - can bail early
+    if (s.droppableId === d.droppableId && s.index === d.index) return;
 
-      // reordering column
-      if (result.type === KANBAN_TITLES.COLUMNS) {
+    switch (result.type) {
+      case KANBAN_TITLES.COLUMNS: {
         const column = columns[s.index];
         if (column) {
-          console.log('reordering column', s.index, d.index, column);
+          setColumns(prev => reorderList(prev, s.index, d.index));
 
-          // optimistic update
-          setColumns({ source: s.index, destination: d.index });
-
-          // server update
-          // if (1 + 1 != 2)
           await changeIssueStateOrdinal.mutateAsync({
-            id: column.id,
+            pid: project.id,
+            sid: column.id,
             ordinal: d.index,
           });
         }
+
+        break;
       }
-    });
-  }
+      case KANBAN_TITLES.ISSUES: {
+        setOrdered(prev => reorderMap(prev, s, d));
+        console.log('reorder issues', reorderMap(ordered, s, d));
+
+        break;
+      }
+      default: {
+        console.error('Unknown type', result.type);
+      }
+    }
+  };
 
   return (
     <Box w="100%">
@@ -153,7 +145,11 @@ const Board = (props: Props<Quote>) => {
       </Stack>
 
       {selectedType === Boards.kanban && (
-        <KanbanBoard data={ordered} columns={columns} onDragEnd={onDragEnd} />
+        <KanbanBoard
+          data={ordered}
+          columns={columns}
+          onDragEnd={res => startTransition(async () => await onDragEnd(res))}
+        />
       )}
       {selectedType === Boards.table && <Box mih="100%">Not Setup</Box>}
     </Box>

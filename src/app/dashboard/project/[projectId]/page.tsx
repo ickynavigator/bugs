@@ -23,7 +23,7 @@ const Page = (props: Props) => {
     return <div>Project not found</div>;
   }
 
-  return <Board data={{}} project={project.data} />;
+  return <Board project={project.data} />;
 };
 
 export default Page;

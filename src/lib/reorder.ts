@@ -13,7 +13,7 @@ export function reorderList<TItem>(
 }
 
 export function reorderMap<TItem>(
-  itemMap: Record<string, TItem[]>,
+  itemMap: Record<number | string, TItem[]>,
   source: DraggableLocation,
   destination: DraggableLocation,
 ) {

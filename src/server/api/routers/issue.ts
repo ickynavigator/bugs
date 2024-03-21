@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { KANBAN_TITLES } from '~/lib/constant';
 import { createTRPCRouter, protectedProcedure } from '~/server/api/trpc';
 
 export const issueRouter = createTRPCRouter({
@@ -138,14 +139,17 @@ export const issueRouter = createTRPCRouter({
         where: { Project: { id: input.projectId } },
       });
 
-      const group = states.reduce<
-        Record<(typeof states)[number]['id'], typeof issues>
-      >((acc, state) => {
-        return {
-          ...acc,
-          [state.id]: issues.filter(issue => issue.stateId === state.id),
-        };
-      }, {});
+      const group = states.reduce<Record<string, typeof issues>>(
+        (acc, state) => {
+          return {
+            ...acc,
+            [`${KANBAN_TITLES.COLUMNS}-${state.id}`]: issues.filter(
+              issue => issue.stateId === state.id,
+            ),
+          };
+        },
+        {},
+      );
 
       return group;
     }),

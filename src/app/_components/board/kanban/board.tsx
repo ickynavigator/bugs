@@ -9,7 +9,7 @@ import { COLUMN_WIDTH, KANBAN_TITLES } from '~/lib/constant';
 import type { Issue, IssueState } from '@prisma/client';
 
 interface BoardProps {
-  data: Record<IssueState['id'], Issue[]>;
+  data: Record<string, Issue[]>;
   columns: IssueState[];
   onDragEnd: OnDragEndResponder;
 }
@@ -40,7 +40,7 @@ const KanbanBoard = (props: BoardProps) => {
                   key={col.id}
                   index={index}
                   columnInfo={col}
-                  data={data[col.id] ?? []}
+                  data={data[`${KANBAN_TITLES.COLUMNS}-${col.id}`] ?? []}
                 />
               ))}
             </Group>
