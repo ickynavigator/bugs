@@ -124,7 +124,7 @@ export const issueRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       return ctx.db.issueState.findMany({
         where: { Project: { id: input.projectId } },
-        orderBy: { ordinal: 'desc' },
+        orderBy: { ordinal: 'asc' },
       });
     }),
   getGroupedIssuesByProject: protectedProcedure
