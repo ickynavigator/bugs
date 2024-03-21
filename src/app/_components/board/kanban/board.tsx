@@ -3,26 +3,29 @@ import {
   Droppable,
   type OnDragEndResponder,
 } from '@hello-pangea/dnd';
-import type { Item, CardProps } from '~/app/_components/board/kanban/types';
 import Column from '~/app/_components/board/kanban/column';
 import { Group, ScrollArea, rem } from '@mantine/core';
-import { COLUMN_WIDTH } from '~/lib/constant';
+import { COLUMN_WIDTH, KANBAN_TITLES } from '~/lib/constant';
+import type { Issue, IssueState } from '@prisma/client';
 
-interface BoardProps<T extends Item> {
-  data: Record<string, T[]>;
-  columns: string[];
-  card: (props: CardProps<T>) => JSX.Element;
+interface BoardProps {
+  data: Record<IssueState['id'], Issue[]>;
+  columns: IssueState[];
   onDragEnd: OnDragEndResponder;
 }
 
-const KanbanBoard = <T extends Item>(props: BoardProps<T>) => {
-  const { data, columns, onDragEnd, card: Card } = props;
+const KanbanBoard = (props: BoardProps) => {
+  const { data, columns, onDragEnd } = props;
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <Droppable droppableId="board" type="COLUMN" direction="horizontal">
+      <Droppable
+        droppableId={KANBAN_TITLES.BOARD}
+        type={KANBAN_TITLES.COLUMNS}
+        direction="horizontal"
+      >
         {provided => (
-          <ScrollArea offsetScrollbars scrollbars="x">
+          <ScrollArea offsetScrollbars scrollbars="x" h="100%">
             <Group
               {...provided.droppableProps}
               ref={provided.innerRef}
@@ -30,14 +33,14 @@ const KanbanBoard = <T extends Item>(props: BoardProps<T>) => {
               gap="xs"
               grow
               align="start"
+              h="100%"
             >
-              {columns.map((key, index) => (
+              {columns.map((col, index) => (
                 <Column
-                  key={key}
+                  key={col.id}
                   index={index}
-                  title={key}
-                  data={data[key] ?? []}
-                  card={Card}
+                  columnInfo={col}
+                  data={data[col.id] ?? []}
                 />
               ))}
             </Group>

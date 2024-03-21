@@ -1,22 +1,23 @@
 import { Draggable, Droppable } from '@hello-pangea/dnd';
-import type {
-  ColumnProps,
-  Item,
-  ListProps,
-} from '~/app/_components/board/kanban/types';
 import { Box, Paper, Stack, Title, rem } from '@mantine/core';
 import { memo } from 'react';
-import { COLUMN_WIDTH } from '~/lib/constant';
+import { COLUMN_WIDTH, KANBAN_TITLES } from '~/lib/constant';
+import Item from '~/app/_components/board/kanban/item';
+import type { Issue, IssueState } from '@prisma/client';
 
-const List = <T extends Item>(props: ListProps<T>) => {
-  const { data, card: Card } = props;
+interface ListProps {
+  data: Issue[];
+}
+
+const List = (props: ListProps) => {
+  const { data } = props;
 
   return (
     <>
       {data.map((item, index) => (
-        <Draggable key={item.id} index={index} draggableId={item.id}>
+        <Draggable key={item.id} index={index} draggableId={`${item.id}`}>
           {(provided, snapshot) => (
-            <Card item={item} provided={provided} snapshot={snapshot} />
+            <Item issue={item} provided={provided} snapshot={snapshot} />
           )}
         </Draggable>
       ))}
@@ -26,12 +27,20 @@ const List = <T extends Item>(props: ListProps<T>) => {
 
 const MemoizedList = memo(List) as typeof List;
 
+interface ColumnProps {
+  index: number;
+  columnInfo: IssueState;
+  data: Issue[];
+}
+
 const COLUMN_OFFSET = 50;
-const Column = <T extends Item>(props: ColumnProps<T>) => {
-  const { title, index, data, card } = props;
+const Column = (props: ColumnProps) => {
+  const { columnInfo, index, data } = props;
+
+  const id = `${KANBAN_TITLES.COLUMNS}-${columnInfo.id}`;
 
   return (
-    <Draggable draggableId={title} index={index}>
+    <Draggable draggableId={id} index={index}>
       {provided => (
         <Paper
           withBorder
@@ -42,23 +51,25 @@ const Column = <T extends Item>(props: ColumnProps<T>) => {
           ref={provided.innerRef}
           {...provided.draggableProps}
         >
-          <Box pb="xs" {...provided.dragHandleProps}>
-            <Title order={3}>{title}</Title>
-          </Box>
-
-          <Droppable droppableId={title} type="QUOTE">
+          <Droppable droppableId={id} type={KANBAN_TITLES.ISSUES}>
             {dropProvided => (
-              <>
-                <Stack
-                  {...dropProvided.droppableProps}
-                  ref={dropProvided.innerRef}
-                  gap="xs"
-                >
-                  <MemoizedList data={data} card={card} />
+              <Box
+                {...dropProvided.droppableProps}
+                ref={dropProvided.innerRef}
+                h="100%"
+              >
+                <Box pb="xs" {...provided.dragHandleProps}>
+                  <Title order={3} c={columnInfo.color}>
+                    {columnInfo.name}
+                  </Title>
+                </Box>
+
+                <Stack gap="xs">
+                  <MemoizedList data={data} />
                 </Stack>
 
                 {dropProvided.placeholder}
-              </>
+              </Box>
             )}
           </Droppable>
         </Paper>

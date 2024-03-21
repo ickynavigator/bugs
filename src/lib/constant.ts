@@ -8,3 +8,8 @@ export const SEVERITY = {
   4: 'Critical',
   5: 'Blocker',
 };
+export const KANBAN_TITLES = {
+  BOARD: 'Board',
+  COLUMNS: 'Columns',
+  ISSUES: 'Issues',
+} as const;
