@@ -10,13 +10,8 @@ import { useForm, zodResolver } from '@mantine/form';
 import { useDisclosure } from '@mantine/hooks';
 import type { Project } from '@prisma/client';
 import React from 'react';
-import { z } from 'zod';
+import { columnSchema } from '~/lib/schema';
 import { api } from '~/trpc/react';
-
-const schema = z.object({
-  name: z.string().min(1).max(16),
-  color: z.string(),
-});
 
 interface Props {
   projectId: Project['id'];
@@ -40,7 +35,7 @@ export default function Column(props: Props) {
       name: '',
       color: '#ffffff',
     },
-    validate: zodResolver(schema),
+    validate: zodResolver(columnSchema),
   });
   const handleSubmit = (values: typeof form.values) => {
     createColumn.mutate({

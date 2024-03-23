@@ -6,12 +6,12 @@ import { IconPencil } from '@tabler/icons-react';
 import type { Note } from '@prisma/client';
 import { api } from '~/trpc/react';
 import { useDisclosure } from '@mantine/hooks';
-import { z } from 'zod';
+import { noteSchema } from '~/lib/schema';
 
 export default function NoteName(props: Note) {
   const form = useForm({
     initialValues: { name: props.name },
-    validate: zodResolver(z.object({ name: z.string().min(1).max(64) })),
+    validate: zodResolver(noteSchema),
   });
   const [opened, { open, close }] = useDisclosure(false);
 

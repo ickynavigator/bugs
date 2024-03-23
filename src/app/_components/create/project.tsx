@@ -2,20 +2,9 @@ import { Button, Modal, Stack, TextInput, Textarea } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
 import { useDisclosure } from '@mantine/hooks';
 import React, { useState } from 'react';
-import { z } from 'zod';
 import { api } from '~/trpc/react';
 import SyncingIcon from '../syncingIcon';
-
-const schema = z.object({
-  name: z.string().min(1).max(16),
-  shortcode: z
-    .string()
-    .length(3)
-    .refine(value => /^[a-zA-Z]+$/.test(value), {
-      message: 'Only alphabetic characters are allowed',
-    }),
-  description: z.string().min(1).max(255).nullable(),
-});
+import { projectSchema } from '~/lib/schema';
 
 interface Props {
   children: (props: { open: () => void }) => React.ReactElement;
@@ -37,13 +26,13 @@ export default function Project(props: Props) {
       form.reset();
     },
   });
-  const form = useForm<z.infer<typeof schema>>({
+  const form = useForm({
     initialValues: {
       name: '',
       shortcode: '',
       description: null,
     },
-    validate: zodResolver(schema),
+    validate: zodResolver(projectSchema),
     onValuesChange(values, prev) {
       if (
         values.shortcode !== prev.shortcode &&

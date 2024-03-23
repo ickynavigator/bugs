@@ -9,17 +9,13 @@ import {
 import { useForm, zodResolver } from '@mantine/form';
 import { useDisclosure } from '@mantine/hooks';
 import React from 'react';
-import { z } from 'zod';
+import { type z } from 'zod';
+import { columnSchema } from '~/lib/schema';
 import { api } from '~/trpc/react';
-
-const schema = z.object({
-  name: z.string().min(1).max(16),
-  color: z.string(),
-});
 
 interface Props {
   children: (props: { open: () => void }) => React.ReactElement;
-  initialData: z.infer<typeof schema> & { id: number; projectId: number };
+  initialData: z.infer<typeof columnSchema> & { id: number; projectId: number };
 }
 
 export default function Column(props: Props) {
@@ -42,7 +38,7 @@ export default function Column(props: Props) {
   });
   const form = useForm({
     initialValues,
-    validate: zodResolver(schema),
+    validate: zodResolver(columnSchema),
   });
 
   const handleSubmit = (values: typeof form.values) => {

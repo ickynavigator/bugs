@@ -10,17 +10,9 @@ import { useForm, zodResolver } from '@mantine/form';
 import { useDisclosure } from '@mantine/hooks';
 import { type Project } from '@prisma/client';
 import React from 'react';
-import { z } from 'zod';
 import { SEVERITY } from '~/lib/constant';
+import { issueSchema } from '~/lib/schema';
 import { api } from '~/trpc/react';
-
-const schema = z.object({
-  name: z.string(),
-  description: z.string().nullable(),
-  severity: z.coerce.number(),
-  projectId: z.number(),
-  stateId: z.coerce.number(),
-});
 
 interface Props {
   projectId: Project['id'];
@@ -52,10 +44,10 @@ export default function Issue(props: Props) {
       severity: Object.keys(SEVERITY)[0],
       projectId,
     },
-    validate: zodResolver(schema),
+    validate: zodResolver(issueSchema),
   });
   const handleSubmit = (base: typeof form.values) => {
-    const values = schema.parse(base);
+    const values = issueSchema.parse(base);
     createIssue.mutate({
       name: values.name,
       description: values.description,
