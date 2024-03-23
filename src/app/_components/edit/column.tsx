@@ -1,15 +1,9 @@
-import {
-  Button,
-  ColorInput,
-  DEFAULT_THEME,
-  Modal,
-  Stack,
-  TextInput,
-} from '@mantine/core';
+import { Button, ColorInput, Modal, Stack, TextInput } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
 import { useDisclosure } from '@mantine/hooks';
 import React from 'react';
 import { type z } from 'zod';
+import { COLOR_SWATCHES } from '~/lib/constant';
 import { columnSchema } from '~/lib/schema';
 import { api } from '~/trpc/react';
 
@@ -63,12 +57,7 @@ export default function Column(props: Props) {
               description="Column color"
               placeholder="#ffffff"
               swatchesPerRow={10}
-              swatches={[
-                ...DEFAULT_THEME.colors.red,
-                ...DEFAULT_THEME.colors.green,
-                ...DEFAULT_THEME.colors.blue,
-                ...DEFAULT_THEME.colors.yellow,
-              ]}
+              swatches={COLOR_SWATCHES}
               {...form.getInputProps('color')}
             />
 
