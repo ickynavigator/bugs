@@ -1,9 +1,22 @@
 import { Draggable, Droppable } from '@hello-pangea/dnd';
-import { Box, Paper, Stack, Title, rem } from '@mantine/core';
+import {
+  ActionIcon,
+  ActionIconGroup,
+  Box,
+  Center,
+  Group,
+  Paper,
+  Stack,
+  Title,
+  rem,
+} from '@mantine/core';
 import { memo } from 'react';
 import { COLUMN_WIDTH, KANBAN_TITLES } from '~/lib/constant';
 import Item from '~/app/_components/board/kanban/item';
 import type { Issue, IssueState } from '@prisma/client';
+import { IconGripVertical, IconPencil } from '@tabler/icons-react';
+import DeleteColumn from '~/app/_components/delete/column';
+import EditColumn from '~/app/_components/edit/column';
 
 interface ListProps {
   data: Issue[];
@@ -58,11 +71,33 @@ const Column = (props: ColumnProps) => {
                 ref={dropProvided.innerRef}
                 h="100%"
               >
-                <Box pb="xs" {...provided.dragHandleProps}>
-                  <Title order={3} c={columnInfo.color}>
-                    {columnInfo.name}
-                  </Title>
-                </Box>
+                <Group pb="xs" justify="space-between">
+                  <Group>
+                    <Center {...provided.dragHandleProps}>
+                      <IconGripVertical
+                        style={{ width: rem(18), height: rem(18) }}
+                        stroke={1.5}
+                      />
+                    </Center>
+                    <Title order={3} c={columnInfo.color}>
+                      {columnInfo.name}
+                    </Title>
+                  </Group>
+
+                  <ActionIconGroup>
+                    <EditColumn initialData={columnInfo}>
+                      {({ open }) => (
+                        <ActionIcon variant="outline" onClick={open}>
+                          <IconPencil
+                            style={{ width: rem(16), height: rem(16) }}
+                            stroke={1.5}
+                          />
+                        </ActionIcon>
+                      )}
+                    </EditColumn>
+                    <DeleteColumn id={columnInfo.id} />
+                  </ActionIconGroup>
+                </Group>
 
                 <Stack gap="xs">
                   <MemoizedList data={data} />

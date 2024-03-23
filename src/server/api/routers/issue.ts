@@ -189,4 +189,24 @@ export const issueRouter = createTRPCRouter({
         data: { ordinal: newOrdinal },
       });
     }),
+  deleteIssueState: protectedProcedure
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.issueState.delete({ where: { id: input.id } });
+    }),
+  editIssueState: protectedProcedure
+    .input(
+      z.object({
+        id: z.number(),
+        name: z.string(),
+        color: z.string(),
+        projectId: z.number(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.issueState.update({
+        where: { id: input.id, Project: { id: input.projectId } },
+        data: { name: input.name, color: input.color },
+      });
+    }),
 });
