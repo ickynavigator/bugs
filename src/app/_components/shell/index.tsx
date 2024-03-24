@@ -54,7 +54,7 @@ export function Shell(props: Props) {
             </Anchor>
           </Group>
 
-          <Group>
+          <Group gap="xs">
             <ColorSchemeToggle />
             <LogoutIcon />
           </Group>
