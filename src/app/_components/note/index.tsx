@@ -1,26 +1,17 @@
 'use client';
 
-// tiptap extensions
-import Highlight from '@tiptap/extension-highlight';
-import StarterKit from '@tiptap/starter-kit';
-import Underline from '@tiptap/extension-underline';
-import TextAlign from '@tiptap/extension-text-align';
-import Superscript from '@tiptap/extension-superscript';
-import SubScript from '@tiptap/extension-subscript';
-
 import {
   RichTextEditor,
-  Link,
   RichTextEditorControlsGroup,
   RichTextEditorContent,
 } from '@mantine/tiptap';
 import { ActionIconGroup, Box, Group, Title } from '@mantine/core';
-import { useEditor } from '@tiptap/react';
 import type { Note } from '@prisma/client';
 import EditNoteName from '~/app/_components/edit/noteName';
 import DeleteNote from '~/app/_components/delete/note';
 import useNoteSync from '~/hooks/useNoteSync';
 import SyncingIcon from '~/app/_components/syncingIcon';
+import useTipTapEditor from '~/hooks/useTipTapEditor';
 
 interface Props {
   note: Note;
@@ -38,17 +29,7 @@ export default function Note(props: Props) {
     initialContent: content,
   });
 
-  const editor = useEditor({
-    extensions: [
-      StarterKit,
-      Underline,
-      Link,
-      Superscript,
-      SubScript,
-      Highlight,
-      TextAlign.configure({ types: ['heading', 'paragraph'] }),
-    ],
-    content,
+  const editor = useTipTapEditor(content, {
     onUpdate: ({ editor }) => {
       onContentChange(editor.getHTML());
     },
