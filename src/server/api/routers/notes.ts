@@ -1,8 +1,21 @@
 import { z } from 'zod';
 import { TIPTAP_DUMMY_TEXT } from '~/lib/constant';
-import { createTRPCRouter, protectedProcedure } from '~/server/api/trpc';
+import {
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
+} from '~/server/api/trpc';
 
 export const notesRouter = createTRPCRouter({
+  getNote: publicProcedure
+    .input(z.object({ userId: z.string(), noteId: z.number() }))
+    .query(async ({ ctx, input }) => {
+      const note = await ctx.db.note.findFirst({
+        where: { id: input.noteId, createdBy: { id: input.userId } },
+      });
+
+      return note;
+    }),
   getNotes: protectedProcedure.query(async ({ ctx }) => {
     const res = await ctx.db.note.findMany({
       where: { createdBy: { id: ctx.session.user.id } },
