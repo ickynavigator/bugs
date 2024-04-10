@@ -1,24 +1,20 @@
-'use client';
-
-import { Center, Loader, Stack } from '@mantine/core';
+import { Stack } from '@mantine/core';
 import CreateNote from '~/app/_components/create/note';
 import Note from '~/app/_components/note/index';
-import { api } from '~/trpc/react';
+import { auth } from '~/server/auth';
+import { api } from '~/trpc/server';
 
-export default function Page() {
-  const notes = api.notes.getNotes.useQuery();
+export default async function Page() {
+  const userId = (await auth())?.user.id;
+  const notes = await api.notes.getNotes.query();
 
   return (
     <Stack>
       <CreateNote />
 
-      {notes.isLoading ? (
-        <Center>
-          <Loader />
-        </Center>
-      ) : (
-        notes.data?.map(note => <Note key={note.id} note={note} />)
-      )}
+      {notes?.map(note => (
+        <Note key={note.id} note={note} userId={`${userId}`} />
+      ))}
     </Stack>
   );
 }

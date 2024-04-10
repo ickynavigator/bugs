@@ -9,16 +9,18 @@ import { ActionIconGroup, Box, Group, Title } from '@mantine/core';
 import type { Note } from '@prisma/client';
 import EditNoteName from '~/app/_components/edit/noteName';
 import DeleteNote from '~/app/_components/delete/note';
+import ShareNote from '~/app/_components/share/note';
 import useNoteSync from '~/hooks/useNoteSync';
 import SyncingIcon from '~/app/_components/syncingIcon';
 import useTipTapEditor from '~/hooks/useTipTapEditor';
 
 interface Props {
   note: Note;
+  userId: string;
 }
 
 export default function Note(props: Props) {
-  const { note } = props;
+  const { note, userId } = props;
   const { content, name } = note;
   const {
     onContentChange,
@@ -47,6 +49,7 @@ export default function Note(props: Props) {
 
           <ActionIconGroup>
             <EditNoteName {...note} />
+            <ShareNote userId={userId} noteId={note.id} />
             <DeleteNote {...note} />
           </ActionIconGroup>
         </Group>
