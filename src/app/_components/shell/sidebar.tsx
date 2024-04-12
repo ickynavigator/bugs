@@ -18,7 +18,6 @@ import {
   IconCheckbox,
   IconNote,
   IconPlus,
-  type Icon,
   IconAddressBook,
   IconBulb,
 } from '@tabler/icons-react';
@@ -26,8 +25,11 @@ import classes from './shell.module.css';
 import { usePathname } from 'next/navigation';
 import CreateProject from '~/app/_components/create/project';
 import { api } from '~/trpc/react';
+import type { ForwardRefExoticComponent, RefAttributes } from 'react';
+import type { Icon, IconProps } from '@tabler/icons-react';
+
 interface MainLinkProps {
-  icon: Icon;
+  icon: ForwardRefExoticComponent<Omit<IconProps, 'ref'> & RefAttributes<Icon>>;
   label: string;
   link: string;
   notifications?: number;

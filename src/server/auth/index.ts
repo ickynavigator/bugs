@@ -2,8 +2,8 @@ import { PrismaAdapter } from '@auth/prisma-adapter';
 import NextAuth from 'next-auth';
 export type { Session } from 'next-auth';
 import type { DefaultSession } from 'next-auth';
-import GitHub from '@auth/core/providers/github';
-import Google from '@auth/core/providers/google';
+import GitHub from 'next-auth/providers/github';
+import Google from 'next-auth/providers/google';
 
 import { db } from '~/server/db';
 import { env } from '~/env';
