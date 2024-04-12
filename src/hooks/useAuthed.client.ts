@@ -1,8 +1,9 @@
 import { useRouter } from 'next/navigation';
-import { useSession } from '~/server/auth/react';
+import { use } from 'react';
+import { getSession } from '~/server/auth/react';
 
 const useAuthed = async () => {
-  const session = useSession();
+  const session = use(getSession());
   const router = useRouter();
 
   if (!session) {
