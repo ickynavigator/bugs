@@ -91,6 +91,7 @@ function MainLink(props: MainLinkProps) {
       })}
       component={Link}
       href={props.link}
+      prefetch={props.disabled}
       passHref
     >
       {inner}
