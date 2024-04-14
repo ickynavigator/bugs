@@ -13,17 +13,15 @@ import ShareNote from '~/app/_components/share/note';
 import useNoteSync from '~/hooks/useNoteSync';
 import SyncingIcon from '~/app/_components/syncingIcon';
 import useTipTapEditor from '~/hooks/useTipTapEditor';
-import useGetAuthedUser from '~/hooks/useGetAuthedUser';
 
 interface Props {
   note: Note;
+  userId: string;
 }
 
 export default function Note(props: Props) {
-  const { note } = props;
+  const { note, userId } = props;
   const { content, name } = note;
-
-  const userId = useGetAuthedUser()?.user?.id;
 
   const {
     onContentChange,
@@ -52,7 +50,7 @@ export default function Note(props: Props) {
 
           <ActionIconGroup>
             <EditNoteName {...note} />
-            <ShareNote userId={`${userId}`} noteId={note.id} />
+            <ShareNote userId={userId} noteId={note.id} />
             <DeleteNote {...note} />
           </ActionIconGroup>
         </Group>
