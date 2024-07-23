@@ -7,6 +7,7 @@ import {
   Box,
   Group,
   Loader,
+  ScrollAreaAutosize,
   Title,
 } from '@mantine/core';
 import { RichTextEditor, RichTextEditorContent } from '@mantine/tiptap';
@@ -78,7 +79,9 @@ function Page(props: Props) {
         </Group>
       </Group>
 
-      <RichTextEditorContent />
+      <ScrollAreaAutosize mah="calc(100vh - calc(var(--mantine-spacing-xl) * 5))">
+        <RichTextEditorContent />
+      </ScrollAreaAutosize>
     </RichTextEditor>
   );
 }
