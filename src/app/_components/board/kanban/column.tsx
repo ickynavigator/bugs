@@ -101,9 +101,9 @@ const Column = (props: ColumnProps) => {
 
                 <Stack gap="xs">
                   <MemoizedList data={data} />
-                </Stack>
 
-                {dropProvided.placeholder}
+                  {dropProvided.placeholder}
+                </Stack>
               </Box>
             )}
           </Droppable>
