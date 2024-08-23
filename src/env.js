@@ -4,6 +4,11 @@ import { vercel } from '@t3-oss/env-nextjs/presets';
 
 export const env = createEnv({
   client: {},
+  shared: {
+    NODE_ENV: z
+      .enum(['development', 'test', 'production'])
+      .default('development'),
+  },
   server: {
     DATABASE_URL: z
       .string()
@@ -13,9 +18,6 @@ export const env = createEnv({
         'You forgot to change the default URL',
       ),
     DATABASE_TOKEN: z.string(),
-    NODE_ENV: z
-      .enum(['development', 'test', 'production'])
-      .default('development'),
     AUTH_SECRET:
       process.env.NODE_ENV === 'production'
         ? z.string()
@@ -26,7 +28,7 @@ export const env = createEnv({
     GOOGLE_CLIENT_SECRET: z.string(),
   },
   experimental__runtimeEnv: {
-    NEXT_PUBLIC_VERCEL_URL: process.env.NEXT_PUBLIC_VERCEL_URL,
+    NODE_ENV: process.env.NODE_ENV,
   },
   extends: [vercel()],
   skipValidation: !!process.env.SKIP_ENV_VALIDATION,
