@@ -34,8 +34,8 @@ const _Item = (props: Props) => {
       {...provided.draggableProps}
       ref={provided.innerRef}
     >
-      <Group justify="space-between">
-        <Group align="center">
+      <Group justify="space-between" wrap="nowrap">
+        <Group align="center" wrap="nowrap">
           <Box {...provided.dragHandleProps}>
             <Center>
               <IconGripVertical
@@ -45,8 +45,10 @@ const _Item = (props: Props) => {
             </Center>
           </Box>
           <Box>
-            <Text>{issue.name}</Text>
-            <Text c="dimmed">{issue.description}</Text>
+            <Text lineClamp={1}>{issue.name}</Text>
+            <Text c="dimmed" lineClamp={2}>
+              {issue.description}
+            </Text>
           </Box>
         </Group>
 
