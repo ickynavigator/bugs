@@ -3,9 +3,7 @@ import { z } from 'zod';
 import { vercel } from '@t3-oss/env-nextjs/presets';
 
 export const env = createEnv({
-  client: {
-    NEXT_PUBLIC_VERCEL_URL: z.string().min(1).default('localhost:3000'),
-  },
+  client: {},
   server: {
     DATABASE_URL: z
       .string()
@@ -30,7 +28,7 @@ export const env = createEnv({
   experimental__runtimeEnv: {
     NEXT_PUBLIC_VERCEL_URL: process.env.NEXT_PUBLIC_VERCEL_URL,
   },
-  extends: [vercel],
+  extends: [vercel()],
   skipValidation: !!process.env.SKIP_ENV_VALIDATION,
   emptyStringAsUndefined: true,
 });
