@@ -1,26 +1,16 @@
-'use client';
-
 import { Stack } from '@mantine/core';
-import { Suspense } from 'react';
 import CreateNote from '~/app/_components/create/note';
-import FullLoader from '~/app/_components/loader/full';
-import Note from '~/app/_components/note/index';
-import useGetAuthedUser from '~/hooks/useGetAuthedUser';
-import { api } from '~/trpc/react';
+import Notes from '~/app/dashboard/notes/_components/notes';
+import { auth } from '~/server/auth';
 
-export default function Page() {
-  const notes = api.notes.getNotes.useQuery();
-  const userId = useGetAuthedUser()?.user?.id;
+export default async function Page() {
+  const userId = (await auth())?.user.id;
 
   return (
     <Stack>
       <CreateNote />
 
-      <Suspense fallback={<FullLoader />}>
-        {notes.data?.map(note => (
-          <Note key={note.id} note={note} userId={`${userId}`} />
-        ))}
-      </Suspense>
+      <Notes userId={`${userId}`} />
     </Stack>
   );
 }
