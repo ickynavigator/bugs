@@ -11,7 +11,7 @@ export default function Note(props: Props) {
   const { userId, noteId } = props;
 
   const shareurl = new URL(
-    `https://${env.VERCEL_PROJECT_PRODUCTION_URL}/share/note/${userId}/${noteId}`,
+    `https://${env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL}/share/note/${userId}/${noteId}`,
   );
 
   return (
