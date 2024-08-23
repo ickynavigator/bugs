@@ -15,6 +15,7 @@ import { type Issue } from '@prisma/client';
 import { IconEyeEdit, IconGripVertical } from '@tabler/icons-react';
 import { memo } from 'react';
 import EditIssue from '~/app/_components/edit/issue';
+import classes from '~/app/_components/board/kanban/item.module.css';
 
 interface Props {
   issue: Issue;
@@ -33,6 +34,8 @@ const _Item = (props: Props) => {
       radius="md"
       {...provided.draggableProps}
       ref={provided.innerRef}
+      className={classes.item}
+      data-severity={issue.severity}
     >
       <Group justify="space-between" wrap="nowrap">
         <Group align="center" wrap="nowrap">

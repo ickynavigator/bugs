@@ -1,0 +1,33 @@
+.item {
+  position: relative;
+  overflow: hidden;
+
+  --severity-width: 5px;
+  --severity-border: transparent;
+
+  &[data-severity='1'] {
+    --severity-border: #36b37e;
+  }
+  &[data-severity='2'] {
+    --severity-border: #ffc400;
+  }
+  &[data-severity='3'] {
+    --severity-border: #ffab00;
+  }
+  &[data-severity='4'] {
+    --severity-border: #ff7452;
+  }
+  &[data-severity='5'] {
+    --severity-border: #ff5630;
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: var(--severity-width);
+    height: 100%;
+    box-shadow: var(--severity-border) var(--severity-width) 0 0 0 inset;
+  }
+}
