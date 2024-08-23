@@ -1,4 +1,5 @@
 import type { DraggableLocation, DropResult } from '@hello-pangea/dnd';
+import { KANBAN_TITLES } from '~/lib/constant';
 
 export function reorderList<TItem>(
   list: TItem[],
@@ -100,4 +101,8 @@ export function reorderKanban<T>(args: ReorderKanban<T>) {
 
     setColumns(reorderMap(columns, source, destination));
   };
+}
+
+export function getIdFromDroppableColumnId(droppableId: string) {
+  return droppableId.replace(`${KANBAN_TITLES.COLUMNS}-`, '');
 }
