@@ -1,20 +1,8 @@
-'use client';
-
 import React from 'react';
-import {
-  ActionIconGroup,
-  Alert,
-  Box,
-  Group,
-  Loader,
-  ScrollAreaAutosize,
-  Title,
-} from '@mantine/core';
-import { RichTextEditor, RichTextEditorContent } from '@mantine/tiptap';
-import useTipTapEditor from '~/hooks/useTipTapEditor';
-import ShareNote from '~/app/_components/share/note';
-import { api } from '~/trpc/react';
-import { IconError404, IconExclamationCircle } from '@tabler/icons-react';
+import { Alert } from '@mantine/core';
+import { api } from '~/trpc/server';
+import { IconError404 } from '@tabler/icons-react';
+import Notes from '~/app/share/note/[userId]/[noteId]/_components/note';
 
 interface Props {
   params: {
@@ -23,36 +11,28 @@ interface Props {
   };
 }
 
-function Page(props: Props) {
+export default async function Page(props: Props) {
   const { params } = props;
-  const { userId, noteId } = params;
+  const { userId, noteId: string_noteId } = params;
 
-  const note = api.notes.getNote.useQuery({ userId, noteId: Number(noteId) });
+  const noteId = Number(string_noteId);
 
-  const editor = useTipTapEditor(
-    note.data?.content ?? '',
-    { editable: false },
-    [note.data],
-  );
-
-  if (note.isLoading) {
-    return <Loader size="xl" />;
-  }
-
-  if (note.error) {
+  if (Number.isNaN(noteId)) {
     return (
       <Alert
         radius="md"
-        color="red"
-        title="An error occurred"
-        icon={<IconExclamationCircle />}
+        color="yellow"
+        title="Invalid note ID"
+        icon={<IconError404 />}
       >
-        An error occurred while fetching the note. Please try again later.
+        Note ID is invalid. Make sure you have the correct URL.
       </Alert>
     );
   }
 
-  if (note.data == undefined) {
+  const note = await api.notes.getNote.query({ userId, noteId });
+
+  if (note == undefined) {
     return (
       <Alert
         radius="md"
@@ -66,24 +46,8 @@ function Page(props: Props) {
   }
 
   return (
-    <RichTextEditor editor={editor}>
-      <Group justify="space-between" mx="md" mt="sm">
-        <Box>
-          <Title>{note.data.name}</Title>
-        </Box>
-
-        <Group>
-          <ActionIconGroup>
-            <ShareNote userId={userId} noteId={noteId} />
-          </ActionIconGroup>
-        </Group>
-      </Group>
-
-      <ScrollAreaAutosize mah="calc(100vh - calc(var(--mantine-spacing-xl) * 5))">
-        <RichTextEditorContent />
-      </ScrollAreaAutosize>
-    </RichTextEditor>
+    <>
+      <Notes userId={userId} note={note} />
+    </>
   );
 }
-
-export default Page;
