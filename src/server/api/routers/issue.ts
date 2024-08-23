@@ -189,6 +189,49 @@ export const issueRouter = createTRPCRouter({
         data: { ordinal: newOrdinal },
       });
     }),
+  changeIssueOrdinal: protectedProcedure
+    .input(
+      z.object({
+        pid: z.number(),
+        sid: z.number(),
+        iid: z.number(),
+        ordinal: z.number(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const issues = await ctx.db.issue.findMany({
+        where: { Project: { id: input.pid } },
+        select: { ordinal: true, id: true },
+      });
+
+      const issue = issues.find(i => i.id === input.iid);
+      if (!issue) return;
+
+      const newOrdinal = input.ordinal;
+      const oldOrdinal = issue.ordinal;
+
+      const diff = newOrdinal - oldOrdinal;
+      const isUp = diff < 0;
+
+      const issuesToUpdate = issues.filter(i => {
+        if (isUp) return i.ordinal >= newOrdinal && i.ordinal < oldOrdinal;
+        return i.ordinal <= newOrdinal && i.ordinal > oldOrdinal;
+      });
+
+      await ctx.db.$transaction(
+        issuesToUpdate.map(i =>
+          ctx.db.issue.update({
+            where: { id: i.id },
+            data: { ordinal: i.ordinal + (isUp ? 1 : -1) },
+          }),
+        ),
+      );
+
+      await ctx.db.issue.update({
+        where: { id: input.iid },
+        data: { ordinal: newOrdinal, state: { connect: { id: input.sid } } },
+      });
+    }),
   deleteIssueState: protectedProcedure
     .input(z.object({ id: z.number() }))
     .mutation(async ({ ctx, input }) => {
