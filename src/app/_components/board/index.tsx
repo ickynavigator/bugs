@@ -21,7 +21,11 @@ import type { RouterOutputs } from '~/trpc/shared';
 import SyncingIcon from '../syncingIcon';
 import { type DropResult } from '@hello-pangea/dnd';
 import { KANBAN_TITLES } from '~/lib/constant';
-import { reorderList, reorderMap } from '~/lib/reorder';
+import {
+  getIdFromDroppableColumnId,
+  reorderList,
+  reorderMap,
+} from '~/lib/reorder';
 
 interface Props {
   project: NonNullable<RouterOutputs['issue']['getProjectByShortCode']>;
@@ -29,8 +33,6 @@ interface Props {
 
 const Board = (props: Props) => {
   const { project } = props;
-
-  const utils = api.useUtils();
 
   const _issueStates = api.issue.getIssueStates.useQuery(
     { projectId: project.id },
@@ -41,13 +43,9 @@ const Board = (props: Props) => {
     { initialData: {} },
   );
 
-  const changeIssueStateOrdinal = api.issue.changeIssueStateOrdinal.useMutation(
-    {
-      onSuccess: () => {
-        void utils.issue.getIssueStates.invalidate({ projectId: project.id });
-      },
-    },
-  );
+  const changeIssueOrdinal = api.issue.changeIssueOrdinal.useMutation();
+  const changeIssueStateOrdinal =
+    api.issue.changeIssueStateOrdinal.useMutation();
 
   const [selectedType, setSelectedType] = useState<string>(Boards.kanban);
 
@@ -71,22 +69,36 @@ const Board = (props: Props) => {
     switch (result.type) {
       case KANBAN_TITLES.COLUMNS: {
         const column = columns[s.index];
-        if (column) {
-          setColumns(prev => reorderList(prev, s.index, d.index));
+        if (column == null) break;
 
-          await changeIssueStateOrdinal.mutateAsync({
-            pid: project.id,
-            sid: column.id,
-            ordinal: d.index,
-          });
-        }
+        setColumns(prev => reorderList(prev, s.index, d.index));
+
+        await changeIssueStateOrdinal.mutateAsync({
+          pid: project.id,
+          sid: column.id,
+          ordinal: d.index,
+        });
+
+        await _issueStates.refetch();
 
         break;
       }
       case KANBAN_TITLES.ISSUES: {
         setOrdered(prev => reorderMap(prev, s, d));
-        console.log('reorder issues', reorderMap(ordered, s, d));
 
+        const issue = ordered[s.droppableId]?.[s.index];
+        const nextStateId = Number(getIdFromDroppableColumnId(d.droppableId));
+
+        if (issue == null) return;
+
+        await changeIssueOrdinal.mutateAsync({
+          pid: issue.projectId,
+          iid: issue.id,
+          sid: nextStateId,
+          ordinal: d.index,
+        });
+
+        await _issues.refetch();
         break;
       }
       default: {
