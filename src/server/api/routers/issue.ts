@@ -259,4 +259,24 @@ export const issueRouter = createTRPCRouter({
         data: { name: input.name, color: input.color },
       });
     }),
+  editIssue: protectedProcedure
+    .input(
+      z.object({
+        id: z.number(),
+        projectId: z.number(),
+        name: z.string(),
+        description: z.string().nullable(),
+        severity: z.coerce.number(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.issue.update({
+        where: { id: input.id, Project: { id: input.projectId } },
+        data: {
+          name: input.name,
+          description: input.description,
+          severity: input.severity,
+        },
+      });
+    }),
 });

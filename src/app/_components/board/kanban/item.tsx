@@ -2,10 +2,19 @@ import {
   type DraggableProvided,
   type DraggableStateSnapshot,
 } from '@hello-pangea/dnd';
-import { Box, Center, Group, Paper, Text, rem } from '@mantine/core';
+import {
+  ActionIcon,
+  Box,
+  Center,
+  Group,
+  Paper,
+  Text,
+  rem,
+} from '@mantine/core';
 import { type Issue } from '@prisma/client';
-import { IconGripVertical } from '@tabler/icons-react';
+import { IconEyeEdit, IconGripVertical } from '@tabler/icons-react';
 import { memo } from 'react';
+import EditIssue from '~/app/_components/edit/issue';
 
 interface Props {
   issue: Issue;
@@ -25,18 +34,32 @@ const _Item = (props: Props) => {
       {...provided.draggableProps}
       ref={provided.innerRef}
     >
-      <Group align="center">
-        <Center {...provided.dragHandleProps}>
-          <IconGripVertical
-            style={{ width: rem(18), height: rem(18) }}
-            stroke={1.5}
-          />
-        </Center>
+      <Group justify="space-between">
+        <Group align="center">
+          <Box {...provided.dragHandleProps}>
+            <Center>
+              <IconGripVertical
+                style={{ width: rem(18), height: rem(18) }}
+                stroke={1.5}
+              />
+            </Center>
+          </Box>
+          <Box>
+            <Text>{issue.name}</Text>
+            <Text c="dimmed">{issue.description}</Text>
+          </Box>
+        </Group>
 
-        <Box>
-          <Text>{issue.name}</Text>
-          <Text c="dimmed">{issue.description}</Text>
-        </Box>
+        <EditIssue initialData={issue}>
+          {({ open }) => (
+            <ActionIcon variant="subtle" onClick={open}>
+              <IconEyeEdit
+                style={{ width: rem(18), height: rem(18) }}
+                stroke={1.5}
+              />
+            </ActionIcon>
+          )}
+        </EditIssue>
       </Group>
     </Paper>
   );
