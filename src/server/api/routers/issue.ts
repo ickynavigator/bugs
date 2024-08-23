@@ -137,6 +137,7 @@ export const issueRouter = createTRPCRouter({
 
       const issues = await ctx.db.issue.findMany({
         where: { Project: { id: input.projectId } },
+        orderBy: { ordinal: 'asc' },
       });
 
       const group = states.reduce<Record<string, typeof issues>>(
