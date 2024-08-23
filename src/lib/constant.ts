@@ -21,3 +21,7 @@ export const COLOR_SWATCHES = [
   ...DEFAULT_THEME.colors.blue,
   ...DEFAULT_THEME.colors.yellow,
 ];
+export const DEBOUNCE_TIME = 200;
+export const PARAM_KEYS = {
+  SEARCH: 'q',
+};

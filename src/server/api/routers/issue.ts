@@ -129,14 +129,20 @@ export const issueRouter = createTRPCRouter({
       });
     }),
   getGroupedIssuesByProject: protectedProcedure
-    .input(z.object({ projectId: z.number() }))
+    .input(z.object({ projectId: z.number(), filter: z.string().default('') }))
     .query(async ({ ctx, input }) => {
       const states = await ctx.db.issueState.findMany({
         where: { Project: { id: input.projectId } },
       });
 
       const issues = await ctx.db.issue.findMany({
-        where: { Project: { id: input.projectId } },
+        where: {
+          Project: { id: input.projectId },
+          OR: [
+            { name: { contains: input.filter } },
+            { description: { contains: input.filter } },
+          ],
+        },
         orderBy: { ordinal: 'asc' },
       });
 

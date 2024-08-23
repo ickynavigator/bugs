@@ -3,10 +3,11 @@ import { useHotkeys } from '@mantine/hooks';
 import { IconSearch } from '@tabler/icons-react';
 import { useRef } from 'react';
 import useParamsState from '~/hooks/useParamsState';
+import { PARAM_KEYS } from '~/lib/constant';
 
 const Search = () => {
   const ref = useRef<HTMLInputElement | null>(null);
-  const [search, setSearch] = useParamsState({ key: 'q' });
+  const [search, setSearch] = useParamsState({ key: PARAM_KEYS.SEARCH });
 
   useHotkeys([['mod+K', () => ref.current?.focus()]]);
 

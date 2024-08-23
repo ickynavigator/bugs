@@ -20,12 +20,14 @@ import { api } from '~/trpc/react';
 import type { RouterOutputs } from '~/trpc/shared';
 import SyncingIcon from '../syncingIcon';
 import { type DropResult } from '@hello-pangea/dnd';
-import { KANBAN_TITLES } from '~/lib/constant';
+import { DEBOUNCE_TIME, KANBAN_TITLES, PARAM_KEYS } from '~/lib/constant';
 import {
   getIdFromDroppableColumnId,
   reorderList,
   reorderMap,
 } from '~/lib/reorder';
+import useParamsState from '~/hooks/useParamsState';
+import { useDebouncedValue } from '@mantine/hooks';
 
 interface Props {
   project: NonNullable<RouterOutputs['issue']['getProjectByShortCode']>;
@@ -34,13 +36,16 @@ interface Props {
 const Board = (props: Props) => {
   const { project } = props;
 
+  const [search] = useParamsState({ key: PARAM_KEYS.SEARCH });
+  const [debouncedSearch] = useDebouncedValue(search, DEBOUNCE_TIME);
+
   const _issueStates = api.issue.getIssueStates.useQuery(
     { projectId: project.id },
-    { initialData: [] },
+    { initialData: [], keepPreviousData: true },
   );
   const _issues = api.issue.getGroupedIssuesByProject.useQuery(
-    { projectId: project.id },
-    { initialData: {} },
+    { projectId: project.id, filter: debouncedSearch },
+    { initialData: {}, keepPreviousData: true },
   );
 
   const changeIssueOrdinal = api.issue.changeIssueOrdinal.useMutation();
@@ -151,7 +156,11 @@ const Board = (props: Props) => {
               </CreateColumn>
             </ButtonGroup>
 
-            <SyncingIcon loading={isPending} />
+            <SyncingIcon
+              loading={
+                isPending || _issueStates.isFetching || _issues.isFetching
+              }
+            />
           </Group>
         </Group>
       </Stack>
