@@ -8,6 +8,7 @@ export const env = createEnv({
     NODE_ENV: z
       .enum(['development', 'test', 'production'])
       .default('development'),
+    VERCEL_PROJECT_PRODUCTION_URL: z.string().optional(),
   },
   server: {
     DATABASE_URL: z
@@ -29,6 +30,7 @@ export const env = createEnv({
   },
   experimental__runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
+    VERCEL_PROJECT_PRODUCTION_URL: process.env.VERCEL_PROJECT_PRO,
   },
   extends: [vercel()],
   skipValidation: !!process.env.SKIP_ENV_VALIDATION,
